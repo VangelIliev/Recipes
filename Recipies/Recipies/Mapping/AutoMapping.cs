@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using Recipies.Data.Entities;
+using Recipes.Domain.Models;
+using Recipies.Data.Models.Entities;
 using Recipies.Models.RecipesModels;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Recipies.Mapping
 {
@@ -12,8 +10,10 @@ namespace Recipies.Mapping
     {
         public AutoMapping()
         {
-            CreateMap<Recipe, RecipeViewModel>();
-            CreateMap<RecipeViewModel, Recipe>();
+            CreateMap<Recipe, RecipeModel>();           
+            CreateMap<RecipeModel, Recipe>();
+            CreateMap<RecipeModel, RecipeViewModel>();
+            CreateMap<RecipeViewModel, RecipeModel>();
         }
     }
 }

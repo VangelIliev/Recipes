@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Recipes.Data.Models.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Recipies.Data.Models.Entities
 {
-    public class Like
+    public class Like : IBaseEntity
     {
         [Required]
         [Key]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public Guid Id { get; set; }
 
         public string RecipeId { get; set; }
         public Recipe Recipe { get; set; }

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Recipies.Data;
+using Recipies.Data.Models.DbContext;
 
 namespace Recipies.Migrations
 {

@@ -7,7 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Recipes.Data.Contracts;
+using Recipes.Data.Implementation;
 using Recipies.Data;
+using Recipies.Data.Models.DbContext;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +45,7 @@ namespace Recipies
                 .AddEntityFrameworkStores<RecipiesDbContext>();
             services.AddControllersWithViews();
             services.AddAutoMapper(typeof(Mapping.AutoMapping));
+            services.AddTransient<IRecipesRepository, RecipesRepository>();
         }
 
         

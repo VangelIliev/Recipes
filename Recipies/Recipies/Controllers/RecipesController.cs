@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Recipies.Data;
+using Recipes.Domain.Models;
+using Recipies.Data.Models.DbContext;
 using Recipies.Models.RecipesModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace Recipies.Controllers
 {
@@ -23,7 +23,7 @@ namespace Recipies.Controllers
         public IActionResult All()
         {
             var recipes = this._recipesDbContext.Recipes.ToList();
-            var models = _mapper.Map<RecipeViewModel>(recipes);
+            var models = _mapper.Map<List<RecipeModel>>(recipes);
             return View(models);
         }
     }

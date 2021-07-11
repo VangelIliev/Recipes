@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Recipes.Data.Models.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,11 +9,11 @@ using System.Threading.Tasks;
 using static Recipies.Data.Models.DataConstants;
 namespace Recipies.Data.Models.Entities
 {
-    public class Product
+    public class Product : IBaseEntity
     {
         [Required]
         [Key]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public Guid Id { get; set; }
 
         [Required]
         [MinLength(ProductNameMinLength)]
