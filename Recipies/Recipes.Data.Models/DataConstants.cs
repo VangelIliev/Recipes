@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace Recipies.Data
+namespace Recipies.Data.Models
 {
-    public  class DataConstants
+    public class DataConstants
     {
         public const int ProductNameMinLength = 3;
 

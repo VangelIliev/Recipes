@@ -31,7 +31,7 @@ namespace Recipies
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
-
+            services.AddTransient<RecipiesDbContext>();
             services.AddDefaultIdentity<IdentityUser>(options => 
             {
                 options.Password.RequireDigit = false;
@@ -41,6 +41,7 @@ namespace Recipies
              })
                 .AddEntityFrameworkStores<RecipiesDbContext>();
             services.AddControllersWithViews();
+            services.AddAutoMapper(typeof(Mapping.AutoMapping));
         }
 
         

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using static Recipies.Data.DataConstants;
-namespace Recipies.Data.Entities
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using static Recipies.Data.Models.DataConstants;
+namespace Recipies.Data.Models.Entities
 {
     public class Recipe
     {
