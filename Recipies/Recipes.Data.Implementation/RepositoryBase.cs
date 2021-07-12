@@ -1,4 +1,6 @@
-﻿using Recipes.Data.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using Recipes.Data.Contracts;
+using Recipes.Data.Models.Interfaces;
 using Recipies.Data.Models.DbContext;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Recipes.Data.Implementation
 {
-    public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
+    public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class,IBaseEntity
     {
         protected readonly RecipiesDbContext _dbContext;
 

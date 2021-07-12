@@ -23,6 +23,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain.Models\Recipes.Domain.Models.csproj" />
+    <ProjectReference Include="..\Recipes.Data.Contracts\Recipes.Data.Contracts.csproj" />
+    <ProjectReference Include="..\Recipes.Data.Implementation\Recipes.Data.Implementation.csproj" />
     <ProjectReference Include="..\Recipes.Data.Models\Recipes.Data.Models.csproj" />
   </ItemGroup>
 
