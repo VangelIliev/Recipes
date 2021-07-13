@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Recipies.Data;
 using Recipies.Data.Models.DbContext;
 
-namespace Recipies.Migrations
+namespace Recipes.Data.Models.Migrations
 {
     [DbContext(typeof(RecipiesDbContext))]
     partial class RecipiesDbContextModelSnapshot : ModelSnapshot
