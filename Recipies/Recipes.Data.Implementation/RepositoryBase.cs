@@ -51,8 +51,7 @@ namespace Recipes.Data.Implementation
         }
 
         public async Task<List<T>> FindAllAsync()
-        {
-            var a = await this._dbContext.Set<T>().AsNoTracking().ToListAsync();
+        {           
             return await this._dbContext.Set<T>().AsNoTracking().ToListAsync();
         }
 
