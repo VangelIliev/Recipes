@@ -47,7 +47,20 @@ namespace Recipies
                 .AddEntityFrameworkStores<RecipiesDbContext>();
             services.AddControllersWithViews();
             services.AddAutoMapper(typeof(Mapping.AutoMapping));
+
+            // REPOSITORIES
+            services.AddTransient<ICategoriesRepository, CategoriesRepository>();
+            services.AddTransient<ICommentRepository, CommentRepository>();
+            services.AddTransient<ILikeRepository, LikeRepository>();
+            services.AddTransient<IProductsRepository, ProductRepository>();
             services.AddTransient<IRecipesRepository, RecipesRepository>();
+
+            //SERVICES
+
+            services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<ICommentService, CommentService>();
+            services.AddTransient<ILikeService, LikeService>();
+            services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IRecipesService, RecipesService>();
         }
 
