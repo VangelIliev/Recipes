@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Recipes.Data.Contracts;
 using Recipes.Data.Implementation;
+using Recipes.Domain.Contracts;
+using Recipes.Domain.Implementation;
 using Recipies.Data;
 using Recipies.Data.Models.DbContext;
 using System;
@@ -46,6 +48,7 @@ namespace Recipies
             services.AddControllersWithViews();
             services.AddAutoMapper(typeof(Mapping.AutoMapping));
             services.AddTransient<IRecipesRepository, RecipesRepository>();
+            services.AddTransient<IRecipesService, RecipesService>();
         }
 
         

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Recipes.Domain.Contracts;
+using Recipes.Domain.Implementation;
 using Recipes.Domain.Models;
 using Recipies.Data.Models.DbContext;
 using Recipies.Models.RecipesModels;
@@ -10,21 +12,34 @@ using System.Linq;
 namespace Recipies.Controllers
 {
     public class RecipesController : Controller
-    {
-        private readonly  RecipiesDbContext _recipesDbContext;
+    {        
         private readonly IMapper _mapper;
-        public RecipesController(RecipiesDbContext recipiesDbContext, IMapper mapper)
-        {
-            this._recipesDbContext = recipiesDbContext;
+        private readonly IRecipesService _recipeService;
+        public RecipesController(RecipiesDbContext recipiesDbContext, IMapper mapper, IRecipesService recipesService)
+        {          
             this._mapper = mapper;
+            this._recipeService = recipesService;
         }
 
         [HttpGet]
-        public IActionResult All()
+        public IActionResult Add()
         {
-            var recipes = this._recipesDbContext.Recipes.ToList();
-            var models = _mapper.Map<List<RecipeModel>>(recipes);
-            return View(models);
+             
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Add(RecipeViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var recipeModel = _mapper.Map<RecipeModel>(model);
+            _recipeService.CreateAsync(recipeModel);
+
+            return RedirectToAction("/Home/Index");
         }
     }
 }
