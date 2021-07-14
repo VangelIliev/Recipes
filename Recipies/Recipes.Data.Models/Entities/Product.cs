@@ -31,8 +31,7 @@ namespace Recipies.Data.Models.Entities
         public string RecipeId { get; set; }
 
         public Recipe Recipe { get; set; }
-
-        public IEnumerable<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
+        
     }
 }
 

@@ -45,8 +45,7 @@ namespace Recipies.Data.Models.Entities
         public Category Category { get; set; }
 
         public string DishId { get; set; }
-
-        public Dish Dish { get; set; }
+        
         public IEnumerable<Like> Likes { get; set; } = new List<Like>();
         public IEnumerable<Comment> Comments { get; set; } = new List<Comment>();
         public IEnumerable<Product> Products { get; set; } = new List<Product>();
