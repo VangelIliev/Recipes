@@ -33,7 +33,7 @@ namespace Recipies.Models.RecipesModels
               
         public string Category { get; set; }
 
-        public IEnumerable<string> Categories { get; set; }
+        public List<string> Categories { get; set; }
 
     }
 }
