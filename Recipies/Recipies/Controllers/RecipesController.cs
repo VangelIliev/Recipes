@@ -61,6 +61,8 @@ namespace Recipies.Controllers
             var userID = user.Id;
             model.ApplicationUserId = userID;
             model.CategoryId = model.CategoryId;
+            model.NumberOfComments = 0;
+            model.NumberOfLikes = 0;
             var recipeModel = _mapper.Map<RecipeModel>(model);
             await _recipeService.CreateAsync(recipeModel);
 
