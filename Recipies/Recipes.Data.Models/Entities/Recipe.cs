@@ -1,4 +1,5 @@
-﻿using Recipes.Data.Models.Interfaces;
+﻿using Recipes.Data.Models.Entities;
+using Recipes.Data.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -44,10 +45,12 @@ namespace Recipies.Data.Models.Entities
 
         public Category Category { get; set; }
 
-        public string DishId { get; set; }
+       
         
         public IEnumerable<Like> Likes { get; set; } = new List<Like>();
         public IEnumerable<Comment> Comments { get; set; } = new List<Comment>();
-        public IEnumerable<Product> Products { get; set; } = new List<Product>();
+        public IEnumerable<RecipeProducts> Ingredients { get; set; } = new List<RecipeProducts>();
+
+        public IEnumerable<Image> Images = new List<Image>();
     }
 }

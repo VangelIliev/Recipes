@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Recipies.Data;
 using Recipies.Data.Models.DbContext;
 
 namespace Recipes.Data.Models.Migrations
@@ -247,10 +246,65 @@ namespace Recipes.Data.Models.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Recipies.Data.Entities.Category", b =>
+            modelBuilder.Entity("Recipes.Data.Models.Entities.Image", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Extension")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("RecipeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("RecipeId");
+
+                    b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("Recipes.Data.Models.Entities.RecipeProducts", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Quantity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("RecipeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("RecipeId");
+
+                    b.ToTable("RecipeProducts");
+                });
+
+            modelBuilder.Entity("Recipies.Data.Models.Entities.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -262,10 +316,11 @@ namespace Recipes.Data.Models.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Recipies.Data.Entities.Comment", b =>
+            modelBuilder.Entity("Recipies.Data.Models.Entities.Comment", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
@@ -276,75 +331,49 @@ namespace Recipes.Data.Models.Migrations
                         .HasColumnType("nvarchar(40)");
 
                     b.Property<string>("RecipeId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("RecipeId1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("RecipeId");
+                    b.HasIndex("RecipeId1");
 
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("Recipies.Data.Entities.Dish", b =>
+            modelBuilder.Entity("Recipies.Data.Models.Entities.Like", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Dishes");
-                });
-
-            modelBuilder.Entity("Recipies.Data.Entities.Ingredient", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("Ingredients");
-                });
-
-            modelBuilder.Entity("Recipies.Data.Entities.Like", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RecipeId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("RecipeId1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("RecipeId");
+                    b.HasIndex("RecipeId1");
 
                     b.ToTable("Likes");
                 });
 
-            modelBuilder.Entity("Recipies.Data.Entities.Product", b =>
+            modelBuilder.Entity("Recipies.Data.Models.Entities.Product", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Calories")
                         .HasColumnType("decimal(18,4)");
@@ -354,35 +383,31 @@ namespace Recipes.Data.Models.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
-                    b.Property<string>("RecipeId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<decimal>("Weight")
                         .HasColumnType("decimal(18,4)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RecipeId");
-
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Recipies.Data.Entities.Recipe", b =>
+            modelBuilder.Entity("Recipies.Data.Models.Entities.Recipe", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CategoryId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("CategoryId1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("DishId")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
@@ -411,14 +436,12 @@ namespace Recipes.Data.Models.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("DishId");
+                    b.HasIndex("CategoryId1");
 
                     b.ToTable("Recipes");
                 });
 
-            modelBuilder.Entity("Recipies.Data.Entities.ApplicationRole", b =>
+            modelBuilder.Entity("Recipies.Data.Models.Entities.ApplicationRole", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
 
@@ -437,7 +460,7 @@ namespace Recipes.Data.Models.Migrations
                     b.HasDiscriminator().HasValue("ApplicationRole");
                 });
 
-            modelBuilder.Entity("Recipies.Data.Entities.ApplicationUser", b =>
+            modelBuilder.Entity("Recipies.Data.Models.Entities.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
@@ -467,7 +490,7 @@ namespace Recipes.Data.Models.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Recipies.Data.Entities.ApplicationUser", null)
+                    b.HasOne("Recipies.Data.Models.Entities.ApplicationUser", null)
                         .WithMany("Claims")
                         .HasForeignKey("ApplicationUserId");
 
@@ -480,7 +503,7 @@ namespace Recipes.Data.Models.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Recipies.Data.Entities.ApplicationUser", null)
+                    b.HasOne("Recipies.Data.Models.Entities.ApplicationUser", null)
                         .WithMany("Logins")
                         .HasForeignKey("ApplicationUserId");
 
@@ -493,7 +516,7 @@ namespace Recipes.Data.Models.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Recipies.Data.Entities.ApplicationUser", null)
+                    b.HasOne("Recipies.Data.Models.Entities.ApplicationUser", null)
                         .WithMany("Roles")
                         .HasForeignKey("ApplicationUserId");
 
@@ -519,95 +542,107 @@ namespace Recipes.Data.Models.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Recipies.Data.Entities.Comment", b =>
+            modelBuilder.Entity("Recipes.Data.Models.Entities.Image", b =>
                 {
-                    b.HasOne("Recipies.Data.Entities.ApplicationUser", "ApplicationUser")
+                    b.HasOne("Recipies.Data.Models.Entities.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("Recipies.Data.Entities.Recipe", "Recipe")
-                        .WithMany("Comments")
-                        .HasForeignKey("RecipeId");
+                    b.HasOne("Recipies.Data.Models.Entities.Recipe", "Recipe")
+                        .WithMany()
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
 
                     b.Navigation("Recipe");
                 });
 
-            modelBuilder.Entity("Recipies.Data.Entities.Ingredient", b =>
+            modelBuilder.Entity("Recipes.Data.Models.Entities.RecipeProducts", b =>
                 {
-                    b.HasOne("Recipies.Data.Entities.Product", "Product")
+                    b.HasOne("Recipies.Data.Models.Entities.Product", "Product")
+                        .WithMany("Recipes")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Recipies.Data.Models.Entities.Recipe", "Recipe")
                         .WithMany("Ingredients")
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Product");
+
+                    b.Navigation("Recipe");
                 });
 
-            modelBuilder.Entity("Recipies.Data.Entities.Like", b =>
+            modelBuilder.Entity("Recipies.Data.Models.Entities.Comment", b =>
                 {
-                    b.HasOne("Recipies.Data.Entities.ApplicationUser", "ApplicationUser")
+                    b.HasOne("Recipies.Data.Models.Entities.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("Recipies.Data.Entities.Recipe", "Recipe")
-                        .WithMany("Likes")
-                        .HasForeignKey("RecipeId");
+                    b.HasOne("Recipies.Data.Models.Entities.Recipe", "Recipe")
+                        .WithMany("Comments")
+                        .HasForeignKey("RecipeId1");
 
                     b.Navigation("ApplicationUser");
 
                     b.Navigation("Recipe");
                 });
 
-            modelBuilder.Entity("Recipies.Data.Entities.Product", b =>
+            modelBuilder.Entity("Recipies.Data.Models.Entities.Like", b =>
                 {
-                    b.HasOne("Recipies.Data.Entities.Recipe", "Recipe")
-                        .WithMany("Products")
-                        .HasForeignKey("RecipeId");
+                    b.HasOne("Recipies.Data.Models.Entities.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("Recipies.Data.Models.Entities.Recipe", "Recipe")
+                        .WithMany("Likes")
+                        .HasForeignKey("RecipeId1");
+
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("Recipe");
                 });
 
-            modelBuilder.Entity("Recipies.Data.Entities.Recipe", b =>
+            modelBuilder.Entity("Recipies.Data.Models.Entities.Recipe", b =>
                 {
-                    b.HasOne("Recipies.Data.Entities.ApplicationUser", "ApplicationUser")
+                    b.HasOne("Recipies.Data.Models.Entities.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("Recipies.Data.Entities.Category", "Category")
+                    b.HasOne("Recipies.Data.Models.Entities.Category", "Category")
                         .WithMany("Recipes")
-                        .HasForeignKey("CategoryId");
-
-                    b.HasOne("Recipies.Data.Entities.Dish", "Dish")
-                        .WithMany()
-                        .HasForeignKey("DishId");
+                        .HasForeignKey("CategoryId1");
 
                     b.Navigation("ApplicationUser");
 
                     b.Navigation("Category");
-
-                    b.Navigation("Dish");
                 });
 
-            modelBuilder.Entity("Recipies.Data.Entities.Category", b =>
+            modelBuilder.Entity("Recipies.Data.Models.Entities.Category", b =>
                 {
                     b.Navigation("Recipes");
                 });
 
-            modelBuilder.Entity("Recipies.Data.Entities.Product", b =>
+            modelBuilder.Entity("Recipies.Data.Models.Entities.Product", b =>
                 {
-                    b.Navigation("Ingredients");
+                    b.Navigation("Recipes");
                 });
 
-            modelBuilder.Entity("Recipies.Data.Entities.Recipe", b =>
+            modelBuilder.Entity("Recipies.Data.Models.Entities.Recipe", b =>
                 {
                     b.Navigation("Comments");
 
-                    b.Navigation("Likes");
+                    b.Navigation("Ingredients");
 
-                    b.Navigation("Products");
+                    b.Navigation("Likes");
                 });
 
-            modelBuilder.Entity("Recipies.Data.Entities.ApplicationUser", b =>
+            modelBuilder.Entity("Recipies.Data.Models.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("Claims");
 

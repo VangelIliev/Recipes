@@ -1,4 +1,5 @@
-﻿using Recipes.Data.Models.Interfaces;
+﻿using Recipes.Data.Models.Entities;
+using Recipes.Data.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -28,10 +29,8 @@ namespace Recipies.Data.Models.Entities
         [Column(TypeName = "decimal(18,4)")]
         public decimal Calories { get; set; }
 
-        public string RecipeId { get; set; }
+        public IEnumerable<RecipeProducts> Recipes { get; set; } = new List<RecipeProducts>();
 
-        public Recipe Recipe { get; set; }
-        
     }
 }
 

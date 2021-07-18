@@ -30,6 +30,6 @@ namespace Recipes.Domain.Models
 
         public string CategoryId { get; set; }
 
-        public string DishId { get; set; }
+        
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Recipes.Data.Models.Entities;
 using Recipies.Data.Models.Entities;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,10 @@ namespace Recipies.Data.Models.DbContext
         public DbSet<Product> Products { get; set; }
 
         public DbSet<Recipe> Recipes { get; set; }
+
+        public DbSet<RecipeProducts> RecipeProducts { get; set; }
+
+        public DbSet<Image> Images { get; set; }
         public RecipiesDbContext(DbContextOptions<RecipiesDbContext> options)
             : base(options)
         {

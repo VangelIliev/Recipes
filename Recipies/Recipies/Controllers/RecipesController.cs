@@ -36,8 +36,7 @@ namespace Recipies.Controllers
         public async Task<IActionResult> Add()
         {
             var categoriesModels = _categoryService.FindAllAsync().Result;
-            var categories = new List<string>();
-
+            var categories = new List<string>();            
             foreach (var category in categoriesModels)
             {
                 categories.Add(category.Name);
