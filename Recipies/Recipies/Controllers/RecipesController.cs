@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Claims;
+using System;
 
 namespace Recipies.Controllers
 {
@@ -35,15 +36,18 @@ namespace Recipies.Controllers
         [HttpGet]
         public async Task<IActionResult> Add()
         {
-            var categoriesModels = _categoryService.FindAllAsync().Result;
-            var categories = new List<string>();            
-            foreach (var category in categoriesModels)
+            var categoriesModels = await _categoryService.FindAllAsync();
+                       
+            var categoriesWithId = new Dictionary<string, string>();
+
+            foreach (var category in categoriesModels.Distinct())
             {
-                categories.Add(category.Name);
+                categoriesWithId.Add(category.Id.ToString(), category.Name);
+                
             }
             var recipeModel = new RecipeViewModel
             {
-                Categories = categories
+                Categories = categoriesWithId
             };
             return View(recipeModel);
         }
@@ -51,6 +55,16 @@ namespace Recipies.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(RecipeViewModel model)
         {
+            var categoriesModels = await _categoryService.FindAllAsync();
+
+            var categoriesWithId = new Dictionary<string, string>();
+            
+            foreach (var category in categoriesModels.Distinct())
+            {
+                categoriesWithId.Add(category.Id.ToString(), category.Name);
+
+            }
+            model.Categories = categoriesWithId;
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -62,8 +76,8 @@ namespace Recipies.Controllers
             model.CategoryId = model.CategoryId;
             model.NumberOfComments = 0;
             model.NumberOfLikes = 0;
-            var recipeModel = _mapper.Map<RecipeModel>(model);
-            await _recipeService.CreateAsync(recipeModel);
+            var recipeModelData = _mapper.Map<RecipeModel>(model);
+            await _recipeService.CreateAsync(recipeModelData);
 
             return RedirectToAction("/Home/Index");
         }

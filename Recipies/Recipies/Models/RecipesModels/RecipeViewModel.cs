@@ -9,14 +9,17 @@ namespace Recipies.Models.RecipesModels
     public class RecipeViewModel
     {
 
-        public string Id { get; set; }      
+        public string Id { get; set; }
+        [Required]
         public string ImageUrl { get; set; }
         
+        [Required]
         public int PortionsSize { get; set; }
-        
+        [Required]
         public int TimeToPrepare { get; set; }
+        [Required]
         [MaxLength(RecipeDescriptionMaxLength)]
-        [MinLength(RecipeDescriptionMinLength)]
+        [MinLength(10)]
         public string PreparationDescription { get; set; }
         
         public DateTime CreatedOn { get; set; }
@@ -28,12 +31,13 @@ namespace Recipies.Models.RecipesModels
         public int TotalCalories { get; set; }
 
         public string ApplicationUserId { get; set; }
-      
+        
         public string CategoryId { get; set; }
               
         public string Category { get; set; }
 
-        public List<string> Categories { get; set; }
+        public Dictionary<string,string> Categories { get; set; }
+        
 
     }
 }
