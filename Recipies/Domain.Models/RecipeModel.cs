@@ -28,7 +28,7 @@ namespace Recipes.Domain.Models
 
         public string ApplicationUserId { get; set; }
 
-        public string CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
 
         
     }

@@ -17,7 +17,7 @@ namespace Recipes.Domain.Models
         
         public decimal Calories { get; set; }
 
-        public string RecipeId { get; set; }
+        public Guid RecipeId { get; set; }
        
     }
 }
