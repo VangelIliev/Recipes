@@ -34,6 +34,13 @@ namespace Recipies.Controllers
         }
 
         [HttpGet]
+        public async Task<ActionResult> All()
+        {
+            var recipesModels = await _recipeService.FindAllAsync();
+            var recipeViewModels = _mapper.Map<List<RecipeViewModel>>(recipesModels);
+            return View(recipeViewModels);
+        }
+        [HttpGet]
         public async Task<IActionResult> Add()
         {
             var categoriesModels = await _categoryService.FindAllAsync();
@@ -79,7 +86,7 @@ namespace Recipies.Controllers
             var recipeModelData = _mapper.Map<RecipeModel>(model);
             await _recipeService.CreateAsync(recipeModelData);
 
-            return RedirectToAction("/Home/Index");
+            return RedirectToAction("All");
         }
     }
 }

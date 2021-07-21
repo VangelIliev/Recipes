@@ -1,7 +1,7 @@
 ﻿@model Recipies.Models.RecipesModels.RecipeViewModel
 
 @{ 
-    var categoryItems = Model.Categories.Select(x => new SelectListItem(x.Key, x.Value));
+    var categoryItems = Model.Categories.Select(x => new SelectListItem(x.Value,x.Key));
 }
 
 <div class="container">
