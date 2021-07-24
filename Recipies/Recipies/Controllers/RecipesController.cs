@@ -57,6 +57,33 @@ namespace Recipies.Controllers
             }
             return View(recipeViewModels);
         }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult> Own()
+        {
+            var recipes = await _recipeService.FindAllAsync();
+            var user = await this._userManager.GetUserAsync(HttpContext.User);
+            var userID = user.Id;
+            var recipesOfUser = recipes.Where(x => x.ApplicationUserId == userID).ToList();
+
+            var recipeViewModels = _mapper.Map<List<RecipeViewModel>>(recipesOfUser);
+            return View(recipeViewModels);
+        }
+        
+        [HttpGet]
+        public async Task<ActionResult> RemoveRecipe(string id)
+        {
+            var recipe = await _recipeService.ReadAsync(Guid.Parse(id));
+            await _recipeService.DeleteAsync(recipe);
+            return this.Redirect("All");
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> UpdateRecipe(string id)
+        {
+            return View();
+        }
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Add()
