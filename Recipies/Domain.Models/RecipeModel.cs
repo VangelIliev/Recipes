@@ -12,6 +12,8 @@ namespace Recipes.Domain.Models
 
         public string ImageUrl { get; set; }
 
+        public string Name { get; set; }
+
         public int PortionsSize { get; set; }
 
         public int TimeToPrepare { get; set; }
@@ -28,6 +30,7 @@ namespace Recipes.Domain.Models
 
         public string ApplicationUserId { get; set; }
 
+        public ApplicationUserModel ApplicationUser { get; set; }
         public Guid CategoryId { get; set; }
 
         

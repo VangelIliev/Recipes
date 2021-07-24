@@ -10,8 +10,8 @@ using Recipies.Data.Models.DbContext;
 namespace Recipes.Data.Models.Migrations
 {
     [DbContext(typeof(RecipiesDbContext))]
-    [Migration("20210717115129_Initial")]
-    partial class Initial
+    [Migration("20210724135747_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -332,17 +332,14 @@ namespace Recipes.Data.Models.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
 
-                    b.Property<string>("RecipeId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("RecipeId1")
+                    b.Property<Guid>("RecipeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("RecipeId1");
+                    b.HasIndex("RecipeId");
 
                     b.ToTable("Comments");
                 });
@@ -356,17 +353,14 @@ namespace Recipes.Data.Models.Migrations
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("RecipeId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("RecipeId1")
+                    b.Property<Guid>("RecipeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("RecipeId1");
+                    b.HasIndex("RecipeId");
 
                     b.ToTable("Likes");
                 });
@@ -402,10 +396,7 @@ namespace Recipes.Data.Models.Migrations
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CategoryId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("CategoryId1")
+                    b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedOn")
@@ -438,7 +429,7 @@ namespace Recipes.Data.Models.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("CategoryId1");
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Recipes");
                 });
@@ -551,7 +542,7 @@ namespace Recipes.Data.Models.Migrations
                         .HasForeignKey("ApplicationUserId");
 
                     b.HasOne("Recipies.Data.Models.Entities.Recipe", "Recipe")
-                        .WithMany()
+                        .WithMany("Images")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -588,7 +579,9 @@ namespace Recipes.Data.Models.Migrations
 
                     b.HasOne("Recipies.Data.Models.Entities.Recipe", "Recipe")
                         .WithMany("Comments")
-                        .HasForeignKey("RecipeId1");
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
 
@@ -603,7 +596,9 @@ namespace Recipes.Data.Models.Migrations
 
                     b.HasOne("Recipies.Data.Models.Entities.Recipe", "Recipe")
                         .WithMany("Likes")
-                        .HasForeignKey("RecipeId1");
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
 
@@ -618,7 +613,9 @@ namespace Recipes.Data.Models.Migrations
 
                     b.HasOne("Recipies.Data.Models.Entities.Category", "Category")
                         .WithMany("Recipes")
-                        .HasForeignKey("CategoryId1");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
 
@@ -638,6 +635,8 @@ namespace Recipes.Data.Models.Migrations
             modelBuilder.Entity("Recipies.Data.Models.Entities.Recipe", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Images");
 
                     b.Navigation("Ingredients");
 

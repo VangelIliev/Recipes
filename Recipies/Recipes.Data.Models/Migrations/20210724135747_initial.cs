@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Recipes.Data.Models.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -223,8 +223,7 @@ namespace Recipes.Data.Models.Migrations
                     NumberOfComments = table.Column<int>(type: "int", nullable: false),
                     TotalCalories = table.Column<int>(type: "int", nullable: false),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CategoryId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CategoryId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -236,11 +235,11 @@ namespace Recipes.Data.Models.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Recipes_Categories_CategoryId1",
-                        column: x => x.CategoryId1,
+                        name: "FK_Recipes_Categories_CategoryId",
+                        column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -249,8 +248,7 @@ namespace Recipes.Data.Models.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
-                    RecipeId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RecipeId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    RecipeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -263,11 +261,11 @@ namespace Recipes.Data.Models.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Comments_Recipes_RecipeId1",
-                        column: x => x.RecipeId1,
+                        name: "FK_Comments_Recipes_RecipeId",
+                        column: x => x.RecipeId,
                         principalTable: "Recipes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -303,8 +301,7 @@ namespace Recipes.Data.Models.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RecipeId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RecipeId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    RecipeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -317,11 +314,11 @@ namespace Recipes.Data.Models.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Likes_Recipes_RecipeId1",
-                        column: x => x.RecipeId1,
+                        name: "FK_Likes_Recipes_RecipeId",
+                        column: x => x.RecipeId,
                         principalTable: "Recipes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -410,9 +407,9 @@ namespace Recipes.Data.Models.Migrations
                 column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_RecipeId1",
+                name: "IX_Comments_RecipeId",
                 table: "Comments",
-                column: "RecipeId1");
+                column: "RecipeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Images_ApplicationUserId",
@@ -430,9 +427,9 @@ namespace Recipes.Data.Models.Migrations
                 column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Likes_RecipeId1",
+                name: "IX_Likes_RecipeId",
                 table: "Likes",
-                column: "RecipeId1");
+                column: "RecipeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RecipeProducts_ProductId",
@@ -450,9 +447,9 @@ namespace Recipes.Data.Models.Migrations
                 column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Recipes_CategoryId1",
+                name: "IX_Recipes_CategoryId",
                 table: "Recipes",
-                column: "CategoryId1");
+                column: "CategoryId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Recipies.Controllers
 {
@@ -37,10 +38,27 @@ namespace Recipies.Controllers
         public async Task<ActionResult> All()
         {
             var recipesModels = await _recipeService.FindAllAsync();
-            var recipeViewModels = _mapper.Map<List<RecipeViewModel>>(recipesModels);
+            var recipeViewModels = new List<RecipeViewModel>();
+            foreach (var model in recipesModels)
+            {
+                var recipe = await _recipeService.ReadAsync(Guid.Parse(model.Id));
+                var userName = await _userManager.FindByIdAsync(recipe.ApplicationUserId);
+                var recipeViewModel = new RecipeViewModel
+                {
+                    Id = recipe.Id,
+                    PreparationDescription = recipe.PreparationDescription,
+                    TimeToPrepare = recipe.TimeToPrepare,
+                    ImageUrl = recipe.ImageUrl,
+                    CreatedBy = userName.Email,
+                    NumberOfComments = recipe.NumberOfComments,
+                    NumberOfLikes = recipe.NumberOfLikes
+                };
+                recipeViewModels.Add(recipeViewModel);
+            }
             return View(recipeViewModels);
         }
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Add()
         {
             var categoriesModels = await _categoryService.FindAllAsync();
@@ -49,8 +67,7 @@ namespace Recipies.Controllers
 
             foreach (var category in categoriesModels.Distinct())
             {
-                categoriesWithId.Add(category.Id.ToString(), category.Name);
-                
+                categoriesWithId.Add(category.Id.ToString(), category.Name);                
             }
             var recipeModel = new RecipeViewModel
             {
@@ -60,6 +77,7 @@ namespace Recipies.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Add(RecipeViewModel model)
         {
             var categoriesModels = await _categoryService.FindAllAsync();

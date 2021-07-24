@@ -14,7 +14,7 @@ namespace Recipies.Data.Models.Entities
         [Key]
         public Guid Id { get; set; }
 
-        public string RecipeId { get; set; }
+        public Guid RecipeId { get; set; }
         public Recipe Recipe { get; set; }
 
         //add user

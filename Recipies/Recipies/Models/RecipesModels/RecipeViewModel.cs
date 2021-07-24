@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Recipies.Data.Models.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -12,7 +13,9 @@ namespace Recipies.Models.RecipesModels
         public string Id { get; set; }
         [Required]
         public string ImageUrl { get; set; }
-        
+        [MaxLength(20)]
+        public string Name { get; set; }
+
         [Required]
         public int PortionsSize { get; set; }
         [Required]
@@ -31,7 +34,9 @@ namespace Recipies.Models.RecipesModels
         public int TotalCalories { get; set; }
 
         public string ApplicationUserId { get; set; }
-        
+
+        public string CreatedBy { get; set; }
+
         public string CategoryId { get; set; }
               
         public string Category { get; set; }

@@ -18,7 +18,7 @@ namespace Recipies.Data.Models.Entities
         [MaxLength(CommentDescriptionMaxLength)]
         public string Description { get; set; }
 
-        public string RecipeId { get; set; }
+        public Guid RecipeId { get; set; }
         public Recipe Recipe { get; set; }
 
         //Add user
