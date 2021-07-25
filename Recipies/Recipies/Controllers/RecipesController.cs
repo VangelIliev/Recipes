@@ -70,7 +70,13 @@ namespace Recipies.Controllers
             var recipeViewModels = _mapper.Map<List<RecipeViewModel>>(recipesOfUser);
             return View(recipeViewModels);
         }
-        
+        [HttpGet]
+        public async Task<ActionResult> Details(string id)
+        {
+            var recipe = await _recipeService.ReadAsync(Guid.Parse(id));
+            var recipeViewModel = _mapper.Map<RecipeViewModel>(recipe);
+            return View(recipeViewModel);
+        }
         [HttpGet]
         public async Task<ActionResult> RemoveRecipe(string id)
         {
@@ -82,7 +88,9 @@ namespace Recipies.Controllers
         [HttpGet]
         public async Task<ActionResult> UpdateRecipe(string id)
         {
-            return View();
+            var recipe = await _recipeService.ReadAsync(Guid.Parse(id));            
+            var recipeViewModel = _mapper.Map<RecipeViewModel>(recipe);                       
+            return View(recipeViewModel);
         }
         [HttpGet]
         [Authorize]
