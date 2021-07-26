@@ -88,9 +88,27 @@ namespace Recipies.Controllers
         [HttpGet]
         public async Task<ActionResult> UpdateRecipe(string id)
         {
-            var recipe = await _recipeService.ReadAsync(Guid.Parse(id));            
-            var recipeViewModel = _mapper.Map<RecipeViewModel>(recipe);                       
-            return View(recipeViewModel);
+            var categoriesModels = await _categoryService.FindAllAsync();
+
+            var categoriesWithId = new Dictionary<string, string>();
+
+            foreach (var category in categoriesModels.Distinct())
+            {
+                categoriesWithId.Add(category.Id.ToString(), category.Name);
+            }
+            
+            var recipe = await _recipeService.ReadAsync(Guid.Parse(id));
+            var recipeViewModel = new RecipeViewModel
+            {
+                Id = recipe.Id,
+                Categories = categoriesWithId,
+                ImageUrl = recipe.ImageUrl,
+                PreparationDescription = recipe.PreparationDescription,
+                TimeToPrepare = recipe.TimeToPrepare,
+                PortionsSize = recipe.PortionsSize
+            };
+            recipeViewModel.Categories = categoriesWithId;
+            return View("Update", recipeViewModel);
         }
         [HttpGet]
         [Authorize]

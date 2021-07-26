@@ -1,0 +1,17 @@
+﻿@model RecipeViewModel
+<div class="container">
+    <div class="card offset-4" style="width: 300px; margin-top:90px;text-align:center">
+        <img src="@Model.ImageUrl" class="w-100 border-bottom" alt="Rounded Image">
+        <div class="card-body">
+            <h5 class="card-title">@Model.Name</h5>
+            <p class="card-text">@Model.PreparationDescription</p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"> size of portion : @Model.PortionsSize</li>
+            <li class="list-group-item">preparation time : @Model.TimeToPrepare minutes.</li>
+            <li class="list-group-item">@Model.NumberOfLikes likes.</li>
+            <li class="list-group-item">@Model.NumberOfComments comments.</li>
+        </ul>
+        
+    </div>
+</div>

@@ -1,0 +1,19 @@
+﻿@model List<RecipeViewModel>
+<div class="container">
+    <div class="row">
+        @foreach (var recipe in Model)
+        {
+            <div class="card col-md-4" style="width: 18rem;text-align:center">
+                <img class="card-img-top" src="@recipe.ImageUrl" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">@recipe.Name</h5>
+                    <p class="card-text">@recipe.PreparationDescription</p>
+                    <p>Likes - @recipe.NumberOfLikes</p>
+                    <p>Comments - @recipe.NumberOfComments</p>                    
+                    <a asp-controller="Recipes" asp-action="RemoveRecipe" class="btn btn-danger" asp-route-id="@recipe.Id" style="text-align:center">Remove</a>
+                    <a asp-controller="Recipes" asp-action="UpdateRecipe" class="btn btn-info" asp-route-id="@recipe.Id" style="text-align:center">Update</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

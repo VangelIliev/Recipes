@@ -1,0 +1,43 @@
+﻿@model Recipies.Models.RecipesModels.RecipeViewModel
+
+@{
+    var categoryItems = Model.Categories.Select(x => new SelectListItem(x.Value, x.Key));
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Add" asp-controller="Recipes" method="post">
+                <div class="form-group">
+                    <label asp-for="ImageUrl" class="control-label"></label>
+                    <input asp-for="ImageUrl" class="form-control" />
+                    <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PortionsSize" class="control-label"></label>
+                    <input asp-for="PortionsSize" class="form-control" />
+                    <span asp-validation-for="PortionsSize" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TimeToPrepare" class="control-label"></label>
+                    <input asp-for="TimeToPrepare" class="form-control" />
+                    <span asp-validation-for="TimeToPrepare" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PreparationDescription" class="control-label"></label>
+                    <textarea asp-for="PreparationDescription" class="form-control"></textarea>
+                    <span asp-validation-for="PreparationDescription" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CategoryId" class="control-label"></label>
+                    <select asp-for="CategoryId" class="form-control" asp-items="categoryItems">
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
