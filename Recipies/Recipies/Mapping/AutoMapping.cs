@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Recipes.Domain.Models;
 using Recipies.Data.Models.Entities;
+using Recipies.Models.AdminModels;
 using Recipies.Models.RecipesModels;
 using System.Collections.Generic;
 
@@ -25,6 +26,8 @@ namespace Recipies.Mapping
             CreateMap<Product, ProductModel>();
             CreateMap<ProductModel, Product>();
 
+            CreateMap<AddCategoryViewModel, CategoryModel>();
+            CreateMap<CategoryModel, AddCategoryViewModel>();
             CreateMap<Category, CategoryModel>();
             CreateMap<CategoryModel, Category>();
         }

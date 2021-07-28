@@ -1,0 +1,13 @@
+﻿@model AddCategoryViewModel
+<div class="container">
+    <form asp-controller="Admin" asp-action="AddCategory" method="post">
+        <div class="form-group" style="margin-top:50px">
+            <label asp-for="Name"></label>
+            <br />
+            <input asp-for="Name" />           
+        </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Add category" />
+        </div>        
+    </form>
+</div>
