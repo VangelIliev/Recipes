@@ -26,10 +26,32 @@
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="Recipes" asp-action="Own">My Recipes</a>
                     </li>
-                    @if (this.User.IsInRole("Administrator"))
+
+                    @if (User.IsInRole("Administrator"))
                     {
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Admin" asp-action="AddCategory">Add category</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Администратор
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-divider">Потребители</div>
+                                <a asp-controller="Admin" asp-action="AllUsers" class="dropdown-item">
+                                    Всички потребители
+                                </a>
+                                <a asp-controller="Admin" asp-action="CreateUser" class="dropdown-item">
+                                    Създай потребител
+                                </a>
+                                <div class="dropdown-divider">Роли</div>
+                                <a asp-controller="Admin" asp-action="AllRoles" class="dropdown-item">
+                                    Всички роли
+                                </a>
+                                <a asp-controller="Admin" asp-action="CreateRole" class="dropdown-item">
+                                    Създай роля
+                                </a>
+                            </div>
                         </li>
                     }
                     <li class="nav-item dropdown">
