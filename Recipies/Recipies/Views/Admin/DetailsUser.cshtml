@@ -1,0 +1,31 @@
+﻿@model UserDetailsViewModel
+<div class="header mt-md-5">
+    <div class="header-body">
+        <div class="row align-items-center">
+            <div class="col">
+                <h6 class="header-pretitle">
+                    Потребители
+                </h6>
+                <h1 class="header-title">
+                    Информация за потребител
+                </h1>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <h5 class="card-header">Потребител: @Model.Email</h5>
+            <div class="card-body">
+                <a asp-controller="Admin" asp-action="AllUsers" class="btn btn-secondary btn-block">Назад</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

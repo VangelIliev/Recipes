@@ -27,7 +27,7 @@
                         <a class="nav-link" asp-controller="Recipes" asp-action="Own">My Recipes</a>
                     </li>
 
-                    @if (User.IsInRole("Administrator"))
+                    @if (this.User.IsInRole("Administrator"))
                     {
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Admin" asp-action="AddCategory">Add category</a>
@@ -54,6 +54,8 @@
                             </div>
                         </li>
                     }
+
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Categories

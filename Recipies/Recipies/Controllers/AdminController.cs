@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Recipies.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles ="Administrator")]
     public class AdminController : Controller
     {
         
@@ -19,17 +19,30 @@ namespace Recipies.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<AdminController> _logger;
         private readonly IAdminService _adminService;
+        private readonly SignInManager<IdentityUser> _signInManager;
         public AdminController(
                 ICategoryService categoryService,
                 IMapper mapper,
-                ILogger logger,
-                IAdminService adminService)
+                ILogger<AdminController> logger,
+                IAdminService adminService,
+                SignInManager<IdentityUser> signInManager)
         {
             this._categoryService = categoryService;
             this._mapper = mapper;
-            this._logger = (ILogger<AdminController>)logger;
+            this._logger = logger;
             this._adminService = adminService;
+            this._signInManager = signInManager;
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+
+        public async Task<IActionResult> LogOut()
+        {
+            await this._signInManager.SignOutAsync();
+            return RedirectToAction("All", "Recipes");
+        }
+
         [HttpGet]
         
         public IActionResult AddCategory()

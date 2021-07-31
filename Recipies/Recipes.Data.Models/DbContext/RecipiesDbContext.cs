@@ -12,9 +12,15 @@ namespace Recipies.Data.Models.DbContext
 {
     public class RecipiesDbContext : IdentityDbContext
     {
-        public DbSet<ApplicationRole> ApplicationRoles { get; set; }
+        public RecipiesDbContext()
+        {
 
-        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        }
+        public RecipiesDbContext(DbContextOptions<RecipiesDbContext> options)
+            : base(options)
+        {
+        }
+        
         public DbSet<Category> Categories { get; set; }
         public DbSet<Comment> Comments { get; set; }              
         public DbSet<Like> Likes { get; set; }
@@ -25,9 +31,6 @@ namespace Recipies.Data.Models.DbContext
         public DbSet<RecipeProducts> RecipeProducts { get; set; }
 
         public DbSet<Image> Images { get; set; }
-        public RecipiesDbContext(DbContextOptions<RecipiesDbContext> options)
-            : base(options)
-        {
-        }
+        
     }
 }

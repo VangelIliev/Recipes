@@ -1,0 +1,46 @@
+﻿@model Microsoft.AspNetCore.Identity.IdentityRole
+<div class="header mt-md-5">
+    <div class="header-body">
+        <div class="row align-items-center">
+            <div class="col">
+                <h6 class="header-pretitle">
+                    Роли
+                </h6>
+                <h1 class="header-title">
+                    Редактиране на роля
+                </h1>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <form class="forms-sample" asp-action="EditRole" asp-controller="Admin">
+            <input asp-for="@Model.Id" value="@Model.Id" type="hidden" />
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label asp-for="Name">Роля</label>
+
+                    <input asp-for="@Model.Name" type="text" class="form-control" placeholder="Въведете име на ролята" required="">
+                    <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <div class="sign-btn text-center">
+                        <input type="submit" class="btn btn-primary btn-block" value="Запазване на промяната по ролята">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <div class="sign-btn text-center">
+                        <a asp-controller="Admin" asp-action="AllRoles" class="btn btn-secondary btn-block">Назад</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Recipes.Data.Contracts;
 using Recipes.Data.Implementation;
 using Recipes.Domain.Contracts;
@@ -37,7 +38,7 @@ namespace Recipies
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddTransient<RecipiesDbContext>();
-            services.AddDefaultIdentity<IdentityUser>(options => 
+            services.AddIdentity<IdentityUser,IdentityRole>(options => 
             {
                 options.Password.RequireDigit = false;
                 options.Password.RequireLowercase = false;
@@ -45,8 +46,11 @@ namespace Recipies
                 options.Password.RequireNonAlphanumeric = false;
              })
                 .AddEntityFrameworkStores<RecipiesDbContext>();
+            services.AddMvc();
+            services.AddSession();
             services.AddControllersWithViews();
             services.AddAutoMapper(typeof(Mapping.AutoMapping));
+            
 
             // REPOSITORIES
             services.AddTransient<ICategoriesRepository, CategoriesRepository>();
@@ -54,14 +58,16 @@ namespace Recipies
             services.AddTransient<ILikeRepository, LikeRepository>();
             services.AddTransient<IProductsRepository, ProductRepository>();
             services.AddTransient<IRecipesRepository, RecipesRepository>();
+            services.AddTransient<IRolesRepository, RolesRepository>();
 
             //SERVICES
-
+            services.AddTransient<IAdminService, AdminService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<ICommentService, CommentService>();
             services.AddTransient<ILikeService, LikeService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IRecipesService, RecipesService>();
+            
         }
 
         
