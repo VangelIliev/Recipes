@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Recipies.Controllers
 {
-    [Authorize(Roles ="Administrator")]
+    [Authorize(Roles = "Administrator")]
     public class AdminController : Controller
     {
         
@@ -20,18 +20,79 @@ namespace Recipies.Controllers
         private readonly ILogger<AdminController> _logger;
         private readonly IAdminService _adminService;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
         public AdminController(
                 ICategoryService categoryService,
                 IMapper mapper,
                 ILogger<AdminController> logger,
                 IAdminService adminService,
-                SignInManager<IdentityUser> signInManager)
+                SignInManager<IdentityUser> signInManager,
+                UserManager<IdentityUser> userManager)
         {
             this._categoryService = categoryService;
             this._mapper = mapper;
             this._logger = logger;
             this._adminService = adminService;
             this._signInManager = signInManager;
+            this._userManager = userManager;
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult LogIn()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> LogIn(LogInUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _signInManager.PasswordSignInAsync(model.Email,
+                           model.Password, model.RememberMe, lockoutOnFailure: true);
+
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("User logged in.");
+                    return RedirectToAction("All","Recipes");
+                }
+            }
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            return View(model);
+        }
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new IdentityUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email
+                };
+                var result = await _userManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return RedirectToAction("All", "Recipes");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+            return View(model);
         }
 
         [HttpPost]
