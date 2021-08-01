@@ -5,10 +5,10 @@
         {
         <div class="card col-md-4" style="width: 18rem;text-align:center">
             <img class="card-img-top" src="@recipe.ImageUrl" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">@recipe.Name</h5>
-                <p class="card-text">@recipe.PreparationDescription</p>
-                <p>Likes - @recipe.NumberOfLikes</p>
+            <div class="card-body">                
+                <h5 class="card-title">@recipe.Name</h5>    
+                <input type="hidden" value="@recipe" />
+                <p>Likes  -  <span id="numberOfLikes-@recipe.Id">@recipe.NumberOfLikes </span> <button class="like" id="likeBtn"><i class="fa fa-thumbs-o-up" id="@recipe.Id" aria-hidden="true"></i></button> <button class="dislike" id="dislikeBtn"> <i class="fa fa-thumbs-o-down" id="@recipe.Id" aria-hidden="true"></i></button></p>
                 <p>Comments - @recipe.NumberOfComments</p>
                 <p>Owner - @recipe.CreatedBy</p>
                 <a asp-controller="Recipes" asp-action="Details" class="btn btn-primary" asp-route-id="@recipe.Id" style="text-align:center">Details</a>              
@@ -17,3 +17,43 @@
         }
     </div>
     </div>
+@section Scripts { 
+    <script>
+        var btnLike = document.getElementById('likeBtn');
+        var btnDislike = document.getElementById('dislikeBtn');
+        
+        $(".like").click(function (e) {
+            
+            $.ajax({
+                url: `/Likes/LikeRecipe/${e.target.id}`,
+                type: "POST",
+                dataType: "json",
+                data: { "id": e.target.id },
+                success: function (data) {
+                    if (data.success) {
+                        var numberOfLikesSpan = document.getElementById(`numberOfLikes-${data.id}`);
+                        var numberOfLikes = numberOfLikesSpan.innerText;
+                        var numberOfLikesAsNumber = Number.parseInt(numberOfLikes);
+                        numberOfLikesAsNumber++;
+                        numberOfLikesSpan.innerText = numberOfLikesAsNumber;
+                    } else {
+                        window.alert(data.message);
+                    };
+                },
+                error: function (error) {
+                    window.alert("Неуспешно харесване на рецепта");
+                }
+            });
+            
+        });
+        $(".dislike").click(function (e) {
+            console.log(e.target.id);
+            var numberOfLikesSpan = document.getElementById(`numberOfLikes-${e.target.id}`);
+            var numberOfLikes = numberOfLikesSpan.innerText;
+            var numberOfLikesAsNumber = Number.parseInt(numberOfLikes);
+            numberOfLikesAsNumber--;
+            numberOfLikesSpan.innerText = numberOfLikesAsNumber;
+        });
+        
+    </script>
+}

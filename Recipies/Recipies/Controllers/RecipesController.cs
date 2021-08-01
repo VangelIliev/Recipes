@@ -22,16 +22,19 @@ namespace Recipies.Controllers
         private readonly IRecipesService _recipeService;
         private readonly ICategoryService _categoryService;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ILikeService _likeService;
         public RecipesController( 
             IMapper mapper, 
             IRecipesService recipesService,
             ICategoryService categoryService,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            ILikeService likeService)
         {          
             this._mapper = mapper;
             this._recipeService = recipesService;
             this._categoryService = categoryService;
             this._userManager = userManager;
+            this._likeService = likeService;
         }
 
         [HttpGet]
@@ -44,6 +47,9 @@ namespace Recipies.Controllers
             {
                 var recipe = await _recipeService.ReadAsync(Guid.Parse(model.Id));
                 var userName = await _userManager.FindByIdAsync(recipe.ApplicationUserId);
+                var allLlikesOfRecipes = await _likeService.FindAllAsync();
+                var currentRecipeLikes = allLlikesOfRecipes.Where(x => x.RecipeId == model.Id);
+                var currentRecipeLikesCount = currentRecipeLikes.Count();
                 var recipeViewModel = new RecipeViewModel
                 {
                     Id = recipe.Id,
@@ -52,7 +58,8 @@ namespace Recipies.Controllers
                     ImageUrl = recipe.ImageUrl,
                     CreatedBy = userName.Email,
                     NumberOfComments = recipe.NumberOfComments,
-                    NumberOfLikes = recipe.NumberOfLikes
+                    NumberOfLikes = currentRecipeLikesCount,
+                    Name = recipe.Name
                 };
                 recipeViewModels.Add(recipeViewModel);
             }

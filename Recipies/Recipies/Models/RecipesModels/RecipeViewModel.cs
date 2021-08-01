@@ -44,5 +44,7 @@ namespace Recipies.Models.RecipesModels
         public Dictionary<string,string> Categories { get; set; }
         
         public Dictionary<string,string> RecipeProducts { get; set; }
+
+        
     }
 }
