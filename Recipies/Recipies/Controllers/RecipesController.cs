@@ -35,6 +35,7 @@ namespace Recipies.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult> All()
         {
             var recipesModels = await _recipeService.FindAllAsync();
@@ -71,6 +72,7 @@ namespace Recipies.Controllers
             return View(recipeViewModels);
         }
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult> Details(string id)
         {
             var recipe = await _recipeService.ReadAsync(Guid.Parse(id));
@@ -78,6 +80,7 @@ namespace Recipies.Controllers
             return View(recipeViewModel);
         }
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult> RemoveRecipe(string id)
         {
             var recipe = await _recipeService.ReadAsync(Guid.Parse(id));
@@ -86,6 +89,7 @@ namespace Recipies.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult> UpdateRecipe(string id)
         {
             var categoriesModels = await _categoryService.FindAllAsync();

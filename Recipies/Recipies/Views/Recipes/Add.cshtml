@@ -4,9 +4,9 @@
     var categoryItems = Model.Categories.Select(x => new SelectListItem(x.Value,x.Key));
 }
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-4">
+<div class="container mt-5">
+    <div class="row offset-3">
+        <div class="col-md-6">
             <form asp-action="Add" asp-controller="Recipes" method="post">
                 <div class="form-group">
                     <label asp-for="ImageUrl" class="control-label"></label>
@@ -24,23 +24,79 @@
                     <span asp-validation-for="TimeToPrepare" class="text-danger"></span>
                 </div>
                 <div class="form-group">
+                    <label asp-for="RecipeProducts" class="control-label"></label>
+                    <div class="input-group" id="recipeProductsDiv">
+                        <input type="text" class="form-control" placeholder="Product">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">-</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Quantity">                        
+                        <button type="button" style="margin-left:5px" class="btn btn-danger" id="recipeProductsBtnRemove">-</button>
+                    </div>                     
+                    <span asp-validation-for="RecipeProducts" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="text-align:center">
+                    <button type="button" style="margin-left:5px;width:100px" class="btn btn-info" id="recipeProductsBtnAdd">+</button>
+                </div>
+                <div class="form-group">
                     <label asp-for="PreparationDescription" class="control-label"></label>
                     <textarea asp-for="PreparationDescription" class="form-control"></textarea>
                     <span asp-validation-for="PreparationDescription" class="text-danger"></span>
-                </div>               
+                </div>
                 <div class="form-group">
-                    <label asp-for="CategoryId" class="control-label"></label>
-                    <select asp-for="CategoryId" class="form-control" asp-items="categoryItems">                        
+                    <label asp-for="Category" class="control-label"></label>
+                    <select asp-for="CategoryId" class="form-control" asp-items="categoryItems">
                     </select>
                     <span asp-validation-for="CategoryId" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
+                <div class="form-group" style="text-align:center">
+                    <input style="width:120px" type="submit" value="Create" class="btn btn-primary" />
                 </div>
             </form>
         </div>
     </div>
 </div>
+@section Scripts
+{
+    <script>
+        $(document).ready(function (){
+            var recipeProductsDiv = document.getElementById('recipeProductsDiv');
+            var btnAdd = document.getElementById('recipeProductsBtnAdd');
+
+            $(document).click(function (event) {
+                var clickedElement = $(event.target).text();
+                if ($(event.target).is(":button")) {
+                    //To do do not allow to remove the first element
+                    if (clickedElement === "-") {
+                       $(event.target.parentElement).remove();
+                    }
+                    
+                }
+
+            });
+            //Add functionality
+            btnAdd.addEventListener('click', function () {
+                var counter = 1;
+                var htmlToAppendOnAdd = `<div class="form-group">
+                    <label asp-for="RecipeProducts" class="control-label"></label>
+                    <div class="input-group" id="recipeProductsDiv">
+                        <input type="text" class="form-control" placeholder="Product">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">-</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Quantity">
+                        <button type="button" style="margin-left:5px" class="btn btn-danger" id="recipeProductsBtnRemove-${counter}">-</button>
+                    </div>
+                    <span asp-validation-for="RecipeProducts" class="text-danger"></span>
+                </div>`;
+                counter++;
+                $(recipeProductsDiv).append(htmlToAppendOnAdd);
+            });
+        })
+        
+       
+    </script>
+}
 
 
 

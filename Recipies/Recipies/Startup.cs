@@ -1,3 +1,4 @@
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -37,7 +38,7 @@ namespace Recipies
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddTransient<RecipiesDbContext>();
+            services.AddTransient<RecipiesDbContext>();           
             services.AddIdentity<IdentityUser,IdentityRole>(options => 
             {
                 options.Password.RequireDigit = false;
@@ -50,7 +51,7 @@ namespace Recipies
             services.AddSession();
             services.AddControllersWithViews();
             services.AddAutoMapper(typeof(Mapping.AutoMapping));
-            
+            services.AddAntiforgery();            
 
             // REPOSITORIES
             services.AddTransient<ICategoriesRepository, CategoriesRepository>();
@@ -86,7 +87,7 @@ namespace Recipies
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            
             app.UseRouting();
 
             app.UseAuthentication();
