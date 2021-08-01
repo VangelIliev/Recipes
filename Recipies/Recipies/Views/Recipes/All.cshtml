@@ -41,18 +41,34 @@
                     };
                 },
                 error: function (error) {
-                    window.alert("Неуспешно харесване на рецепта");
+                    window.alert("Unable to like recipe");
                 }
             });
             
         });
         $(".dislike").click(function (e) {
-            console.log(e.target.id);
-            var numberOfLikesSpan = document.getElementById(`numberOfLikes-${e.target.id}`);
-            var numberOfLikes = numberOfLikesSpan.innerText;
-            var numberOfLikesAsNumber = Number.parseInt(numberOfLikes);
-            numberOfLikesAsNumber--;
-            numberOfLikesSpan.innerText = numberOfLikesAsNumber;
+            $.ajax({
+                url: `/Likes/DisLikeRecipe/${e.target.id}`,
+                type: "POST",
+                dataType: "json",
+                data: { "id": e.target.id },
+                success: function (data) {
+                    if (data.success) {
+                        var numberOfLikesSpan = document.getElementById(`numberOfLikes-${e.target.id}`);
+                        var numberOfLikes = numberOfLikesSpan.innerText;
+                        var numberOfLikesAsNumber = Number.parseInt(numberOfLikes);
+                        numberOfLikesAsNumber--;
+                        numberOfLikesSpan.innerText = numberOfLikesAsNumber;
+                    } else {
+                        window.alert(data.message);
+                    };
+                },
+                error: function (error) {
+                    window.alert("Unable to dislike recipe");
+                }
+            });
+            
+            
         });
         
     </script>

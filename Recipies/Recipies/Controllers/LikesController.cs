@@ -42,5 +42,23 @@ namespace Recipies.Controllers
             return Json(new {success = true, id = id });
         }
 
+        [HttpPost]
+        public async Task<ActionResult> DisLikeRecipe(string id)
+        {
+            var likes = await _likeService.FindAllAsync();
+            var likesForCurrentRecipe = likes.Where(x => x.RecipeId == id);
+            var user = await this._userManager.GetUserAsync(HttpContext.User);
+            var userID = user.Id;
+            var isRecipeLikedByUser = likesForCurrentRecipe.Any(x => x.ApplicationUserId == userID);
+            if (isRecipeLikedByUser == false)
+            {
+                return Json(new { success = false, message = "You cannot dislike the recipe you can only remove your like!" });
+            }
+            var likedRecipeByUser = likesForCurrentRecipe.FirstOrDefault(x => x.ApplicationUserId == userID);
+
+            await this._likeService.DeleteAsync(likedRecipeByUser);
+            return Json(new { success = true, id = id });
+        }
+
     }
 }
