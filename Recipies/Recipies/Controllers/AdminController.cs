@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Recipes.Domain.Contracts;
 using Recipes.Domain.Models;
 using Recipies.Models.AdminModels;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -21,13 +22,18 @@ namespace Recipies.Controllers
         private readonly IAdminService _adminService;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ILikeService _likeService;
+        private readonly IRecipesService _recipesService;
         public AdminController(
                 ICategoryService categoryService,
                 IMapper mapper,
                 ILogger<AdminController> logger,
                 IAdminService adminService,
                 SignInManager<IdentityUser> signInManager,
-                UserManager<IdentityUser> userManager)
+                UserManager<IdentityUser> userManager,
+                ILikeService likeService,
+                IRecipesService recipesService
+                )
         {
             this._categoryService = categoryService;
             this._mapper = mapper;
@@ -35,6 +41,8 @@ namespace Recipies.Controllers
             this._adminService = adminService;
             this._signInManager = signInManager;
             this._userManager = userManager;
+            this._likeService = likeService;
+            this._recipesService = recipesService;
         }
 
         [HttpGet]
@@ -257,6 +265,14 @@ namespace Recipies.Controllers
         {
             await this._adminService.DeleteRoleAsync(id);
             return RedirectToAction("AllRoles");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteRecipe(string id)
+        {
+            var recipe = await this._recipesService.ReadAsync(Guid.Parse(id));
+            await this._recipesService.DeleteAsync(recipe);
+            return RedirectToAction("All","Recipes");
         }
     }
 }
