@@ -83,7 +83,10 @@ namespace Recipies.Controllers
         public async Task<ActionResult> Details(string id)
         {
             var recipe = await _recipeService.ReadAsync(Guid.Parse(id));
+            var recipeLikes = await _likeService.FindAllAsync();
+            var likesCount = recipeLikes.Where(x => x.RecipeId == id).Count();            
             var recipeViewModel = _mapper.Map<RecipeViewModel>(recipe);
+            recipeViewModel.NumberOfLikes = likesCount;
             return View(recipeViewModel);
         }
         [HttpGet]
