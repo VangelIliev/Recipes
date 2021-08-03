@@ -8,7 +8,12 @@ using System.Threading.Tasks;
 namespace Recipies.Controllers
 {
     [Authorize]
-    public class CommentsController : Controller
+    public class CommentController : Controller
     {
+        [HttpGet]
+        public IActionResult All(string id)
+        {
+            return View();
+        }
     }
 }
