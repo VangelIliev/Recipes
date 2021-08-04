@@ -1,9 +1,17 @@
-﻿@section Styles {
+﻿@model Recipies.Models.CommentModels.CommentViewModel
+@section Styles {
     <link rel="stylesheet" href="~/css/Comments.css" />
 }
 
 <!-- Main Body -->
 <section>
+    <div class="card mb-3">
+        <img src="@Model.ImageUrl" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">@Model.RecipeName</h5>            
+            <p class="card-text"><small class="text-muted">Last updated 333 mins ago</small></p>
+        </div>
+    </div>
     <div class="container">
         <div class="row">
             <div class="col-sm-5 col-md-6 col-12 pb-4">
@@ -32,13 +40,40 @@
             <div class="col-lg-4 col-md-5 col-sm-4 offset-md-1 offset-sm-1 col-12 mt-4">
                 <form id="algin-form">
                     <div class="form-group">
-                        <h4>Leave a comment</h4> <label for="message">Message</label> <textarea name="msg" id="" msg cols="30" rows="5" class="form-control" style="background-color: white;"></textarea>
+                        <h4>Leave a comment</h4> <label asp-for="CommentMessage">Message</label> <textarea asp-for="CommentMessage"  msg cols="30" rows="5" class="form-control" style="background-color: white;"></textarea>
                     </div>
-                    <div class="form-group"> <label for="name">Name</label> <input type="text" name="name" id="fullname" class="form-control"> </div>
-                    <div class="form-group"> <label for="email">Email</label> <input type="text" name="email" id="email" class="form-control"> </div>
-                    <div class="form-group"> <button type="button" id="post" class="btn">Post Comment</button> </div>
+                    <div class="form-group"> <label asp-for="SenderName">Name</label> <input type="text" asp-for="SenderName"  class="form-control"> </div>
+                    <div class="form-group"> <label asp-for="SenderEmail">Email</label> <input type="text" asp-for="SenderEmail" class="form-control"> </div>
+                    <div class="form-group"> <button type="button" id="sendMessage" class="btn">Post Comment</button> </div>
                 </form>
             </div>
         </div>
     </div>
 </section>
+
+@section Scripts {
+    <script>
+
+        var buttonSendMessage = document.getElementById('sendMessage');
+        buttonSendMessage.addEventListener('click', function () {
+            var formData = $('#algin-form').serialize();
+            console.log(formData);
+            $.ajax({
+                url: `/Comment/Add`,
+                type: "POST",                
+                data: $('#algin-form').serialize(),
+                dataType:'json',
+                success: function (data) {
+                    if (data.success) {
+                        console.log('dobavi comentar')
+                    } else {
+                        window.alert(data.message);
+                    };
+                },
+                error: function (error) {
+                    window.alert("Неуспешно добавяне на коментар");
+                }
+            });
+        });
+    </script>
+} 
