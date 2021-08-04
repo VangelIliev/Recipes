@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Recipes.Domain.Contracts;
+using Recipies.Models.AdminModels;
 using Recipies.Models.CommentModels;
 using System;
 using System.Collections.Generic;
@@ -41,8 +42,9 @@ namespace Recipies.Controllers
 
         public async Task<IActionResult> Add(CommentViewModel model)
         {
-            var users = await this._adminService.GetAllUsersAsync();
-            var isUserRegistered = users.FirstOrDefault(x => x.Email == model.SenderEmail);
+            var allUsers = await this._adminService.GetAllUsersAsync();
+            var usersViewModels = this._mapper.Map<IList<UserDetailsViewModel>>(allUsers);
+            var isUserRegistered = allUsers.FirstOrDefault(x => x.Email == model.SenderEmail);
             if (isUserRegistered == null)
             {
                 return Json(new { success = false, message = "There isn't registered user with this Email address!" });

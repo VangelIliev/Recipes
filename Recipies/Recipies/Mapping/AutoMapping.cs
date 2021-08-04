@@ -12,6 +12,16 @@ namespace Recipies.Mapping
     {
         public AutoMapping()
         {
+            CreateMap<Microsoft.AspNetCore.Identity.IdentityUser, Recipes.Domain.Models.UserDetailsResponse>();
+
+            CreateMap<Recipes.Domain.Models.UserDetailsResponse, Recipies.Models.AdminModels.UserDetailsViewModel>();
+            CreateMap<Recipies.Models.AdminModels.UserDetailsViewModel, Recipes.Domain.Models.UserDetailsResponse>();
+
+            CreateMap<Recipes.Domain.Models.UserDetailsResponse, Recipies.Models.AdminModels.EditUserViewModel>();
+
+            CreateMap<Recipes.Domain.Models.EditUserRequest, Recipies.Models.AdminModels.EditUserViewModel>();
+            CreateMap<Recipies.Models.AdminModels.EditUserViewModel, Recipes.Domain.Models.EditUserRequest>();
+
             //Recipe
             CreateMap<Recipe, RecipeModel>();           
             CreateMap<RecipeModel, Recipe>();

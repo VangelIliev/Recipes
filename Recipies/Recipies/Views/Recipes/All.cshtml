@@ -8,9 +8,27 @@
             <div class="card-body">
                 <h5 class="card-title">@recipe.Name</h5>
                 <input type="hidden" value="@recipe" />
-                <p>Likes  -  <span id="numberOfLikes-@recipe.Id">@recipe.NumberOfLikes </span> <button class="like" id="likeBtn"><i class="fa fa-thumbs-o-up" id="@recipe.Id" aria-hidden="true"></i></button> <button class="dislike" id="dislikeBtn"> <i class="fa fa-thumbs-o-down" id="@recipe.Id" aria-hidden="true"></i></button></p>
-                <p>Comments - <span id="numberOfComments-@recipe.Id">@recipe.NumberOfComments </span> <a class="btn btn-outline-primary ml-2" asp-controller="Comment" asp-action="All" asp-route-id="@recipe.Id">Add comment</a>
-                <p>Owner - @recipe.CreatedBy</p>
+                <p>
+                    Likes  -  <span id="numberOfLikes-@recipe.Id">@recipe.NumberOfLikes </span>
+                    @if (this.User.Identity.IsAuthenticated)
+                    {
+                        <button class="like" id="likeBtn">
+                            <i class="fa fa-thumbs-o-up" id="@recipe.Id" aria-hidden="true"></i>
+                        </button>
+                        <button class="dislike" id="dislikeBtn">
+                            <i class="fa fa-thumbs-o-down" id="@recipe.Id" aria-hidden="true"></i>
+                        </button>
+
+                    }
+                </p>
+                <p>
+                    Comments - <span id="numberOfComments-@recipe.Id">@recipe.NumberOfComments </span>
+                    @if (this.User.Identity.IsAuthenticated)
+                    {
+                        <a class="btn btn-outline-primary ml-2" asp-controller="Comment" asp-action="All" asp-route-id="@recipe.Id">Add comment</a>
+                    }
+
+                        <p>Owner - @recipe.CreatedBy</p>
                 @if (this.User.Identity.IsAuthenticated)
                 {
                     if (this.User.IsInRole("Administrator"))
