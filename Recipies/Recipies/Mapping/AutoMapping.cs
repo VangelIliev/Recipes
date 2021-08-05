@@ -46,6 +46,8 @@ namespace Recipies.Mapping
             CreateMap<CommentModel, RecipeModel>();
             CreateMap<RecipeModel, CommentViewModel>();
             CreateMap<CommentViewModel, RecipeModel>();
+            CreateMap<CommentModel, CommentViewModel>();
+            CreateMap<CommentViewModel, CommentModel>();
         }
     }
 }

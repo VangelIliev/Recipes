@@ -19,6 +19,7 @@ namespace Recipes.Domain.Models
 
         public string ApplicationUserId { get; set; }
 
-        
+        public DateTime CreatedOn { get; set; }
+
     }
 }

@@ -26,5 +26,7 @@ namespace Recipies.Data.Models.Entities
         public string ApplicationUserId { get; set; }
 
         public ApplicationUser ApplicationUser { get; set; }
+
+        public DateTime CreatedOn { get; set; }
     }
 }

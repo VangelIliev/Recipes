@@ -41,14 +41,21 @@ namespace Recipies.Controllers
         {
             var recipe = await this._recipesService.ReadAsync(Guid.Parse(id));
             var commentViewModel = _mapper.Map<CommentViewModel>(recipe);
-            commentViewModel.RecipeName = recipe.Name;
-            commentViewModel.RecipeId = recipe.Id;
-            return View(commentViewModel);
+            var allComments = await this._commentService.FindAllAsync();
+            var commentsForRecipe = allComments.Where(x => x.RecipeId == id).ToList();
+            var recipeCommentsViewModel = _mapper.Map<List<CommentViewModel>>(allComments);
+            foreach (var commentModel in recipeCommentsViewModel)
+            {
+                commentViewModel.RecipeName = recipe.Name;
+                commentViewModel.RecipeId = recipe.Id;                
+            }
+            
+            return View(recipeCommentsViewModel);
         }
 
         [HttpPost]
 
-        public async Task<IActionResult> Add(CommentViewModel model)
+        public async Task<IActionResult> Add(CommentSendModel model)
         {
             var allUsers = await this._adminService.GetAllUsersAsync();
             var usersViewModels = this._mapper.Map<IList<UserDetailsViewModel>>(allUsers);
@@ -68,7 +75,8 @@ namespace Recipies.Controllers
             {
                 Description = model.CommentMessage,
                 RecipeId = model.RecipeId,
-                ApplicationUserId = userID
+                ApplicationUserId = userID,
+                CreatedOn = DateTime.Now
             };
             await this._commentService.CreateAsync(comment);
             return Json(new { success = true, message = "You have added successfully a comment",commentModel = model });
