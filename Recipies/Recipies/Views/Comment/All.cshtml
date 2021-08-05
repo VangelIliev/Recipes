@@ -13,7 +13,7 @@
         </div>
     </div>
     <div class="container">
-        <div class="row">
+        <div class="row" id="rowToAppend">
             <div class="col-sm-5 col-md-6 col-12 pb-4">
                 <h1>Comments</h1>
                 <div class="comment mt-4 text-justify float-left">
@@ -39,10 +39,10 @@
             </div>
             <div class="col-lg-4 col-md-5 col-sm-4 offset-md-1 offset-sm-1 col-12 mt-4">
                 <form id="algin-form">
+                    <input type="hidden" asp-for="RecipeId" />
                     <div class="form-group">
                         <h4>Leave a comment</h4> <label asp-for="CommentMessage">Message</label> <textarea asp-for="CommentMessage"  msg cols="30" rows="5" class="form-control" style="background-color: white;"></textarea>
                     </div>
-                    <div class="form-group"> <label asp-for="SenderName">Name</label> <input type="text" asp-for="SenderName"  class="form-control"> </div>
                     <div class="form-group"> <label asp-for="SenderEmail">Email</label> <input type="text" asp-for="SenderEmail" class="form-control"> </div>
                     <div class="form-group" style="text-align:center"> <button type="button" id="sendMessage" class="btn-warning rounded" style="color:black">Post Comment</button> </div>
                 </form>
@@ -53,7 +53,7 @@
 
 @section Scripts {
     <script>
-
+        
         var buttonSendMessage = document.getElementById('sendMessage');
         buttonSendMessage.addEventListener('click', function () {            
             $.ajax({
@@ -64,7 +64,13 @@
                 success: function (data) {
                     console.log(data);
                     if (data.success) {
-                        window.alert(data.message)
+                        var rowToAppend = document.getElementById('rowToAppend');
+                        var htmlToAppend = `<div class="comment mt-4 text-justify">
+                        <img src="https://i.imgur.com/CFpa3nK.jpg"  alt="" class="rounded-circle" width="40" height="40">
+                        <h4>${data.commentModel.senderEmail}</h4> <span>- ${data.commentModel.commentCreation}</span> <br>
+                        <p>${data.commentModel.commentMessage}</p>
+                        </div>`;
+                        $(rowToAppend).append(htmlToAppend);                        
                     } else {
                         window.alert(data.message);
                     };

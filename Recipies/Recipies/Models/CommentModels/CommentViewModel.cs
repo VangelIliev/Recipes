@@ -8,6 +8,7 @@ namespace Recipies.Models.CommentModels
 {
     public class CommentViewModel
     {
+        public string RecipeId { get; set; }
         public string RecipeName { get; set; }
 
         public string ImageUrl { get; set; }
@@ -16,10 +17,11 @@ namespace Recipies.Models.CommentModels
         [Required]
         [MaxLength(50)]
         public string CommentMessage { get; set; }
-        [Required]
         public string SenderName { get; set; }
         [Required]
         [EmailAddress]
         public string SenderEmail { get; set; }
+
+        public string CommentCreation { get; set; }
     }
 }

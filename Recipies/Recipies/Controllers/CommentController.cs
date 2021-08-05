@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Recipes.Domain.Contracts;
+using Recipes.Domain.Models;
 using Recipies.Models.AdminModels;
 using Recipies.Models.CommentModels;
 using System;
@@ -17,15 +19,21 @@ namespace Recipies.Controllers
         private readonly IRecipesService _recipesService;
         private readonly IMapper _mapper;
         private readonly IAdminService _adminService;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly ICommentService _commentService;
 
         public CommentController(
-            IRecipesService recipesService, 
-            IMapper mapper, 
-            IAdminService adminService)
+            IRecipesService recipesService,
+            IMapper mapper,
+            IAdminService adminService,
+            UserManager<IdentityUser> userManager, 
+            ICommentService commentService)
         {
             this._recipesService = recipesService;
             this._mapper = mapper;
-            _adminService = adminService;
+            this._adminService = adminService;
+            this._userManager = userManager;
+            this._commentService = commentService;
         }
 
         [HttpGet]
@@ -34,7 +42,7 @@ namespace Recipies.Controllers
             var recipe = await this._recipesService.ReadAsync(Guid.Parse(id));
             var commentViewModel = _mapper.Map<CommentViewModel>(recipe);
             commentViewModel.RecipeName = recipe.Name;
-            ;
+            commentViewModel.RecipeId = recipe.Id;
             return View(commentViewModel);
         }
 
@@ -45,16 +53,25 @@ namespace Recipies.Controllers
             var allUsers = await this._adminService.GetAllUsersAsync();
             var usersViewModels = this._mapper.Map<IList<UserDetailsViewModel>>(allUsers);
             var isUserRegistered = allUsers.FirstOrDefault(x => x.Email == model.SenderEmail);
-            if (isUserRegistered == null)
-            {
-                return Json(new { success = false, message = "There isn't registered user with this Email address!" });
-            }
-
+            var user = await this._userManager.GetUserAsync(HttpContext.User);
+            model.CommentCreation = DateTime.Now.ToShortDateString();
+            var userID = user.Id;
             if (!ModelState.IsValid)
             {
                 return Json(new { success = false, message = "Please insert valid form data!" });
             }
-            return Json(new { success = true, message = "You have added successfully a comment"});
+            if (isUserRegistered == null)
+            {
+                return Json(new { success = false, message = "There isn't registered user with this Email address!" });
+            }
+            var comment = new CommentModel
+            {
+                Description = model.CommentMessage,
+                RecipeId = model.RecipeId,
+                ApplicationUserId = userID
+            };
+            await this._commentService.CreateAsync(comment);
+            return Json(new { success = true, message = "You have added successfully a comment",commentModel = model });
         }
     }
 }
