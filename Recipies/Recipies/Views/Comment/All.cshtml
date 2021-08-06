@@ -16,23 +16,45 @@
         <div class="row" id="rowToAppend">            
             <div class="col-sm-5 col-md-6 col-12 pb-4">
                 <h1>Comments</h1>
-                @foreach (var comment in Model)
+                @if (Model.Count > 1)
                 {
-                    <div class="comment mt-4 text-justify">
-                        <img src=@comment.ImageUrl alt="" class="rounded-circle" width="40" height="40">
-                        <h4>@comment.SenderEmail</h4> <span>- @comment.CommentCreation</span> <br>
-                        <p>@comment.CommentMessage</p>
-                    </div>
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        <div class="comment mt-4 text-justify">
+                            <img src=@Model[i].ImageUrl alt="" class="rounded-circle" width="40" height="40">
+                            <h4>@Model[i].SenderEmail</h4> <span>- @Model[i].CreatedOn</span> <br>
+                            <p>@Model[i].Description</p>
+                        </div>
+                    }
                 }
-                
+                else if (Model.Count == 1)
+                {
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        <div class="comment mt-4 text-justify">
+                            <img src=@Model[i].ImageUrl alt="" class="rounded-circle" width="40" height="40">
+                            <h4>@Model[i].SenderEmail</h4> <span>- @Model[i].CreatedOn</span> <br>
+                            <p>@Model[i].Description</p>
+                        </div>
+                    }
+
+                }
+                else
+                {
+                    <h3 id="Comments">There are no comments for this recipe</h3>
+                }
+
+
+
+
             </div>
             <div class="col-lg-4 col-md-5 col-sm-4 offset-md-1 offset-sm-1 col-12 mt-4">
                 <form id="algin-form">
-                    <input type="hidden" asp-for="@Model[0].RecipeId" />
+                    <input type="hidden" name="RecipeId" value="@ViewData["RecipeId"]" />
                     <div class="form-group">
-                        <h4>Leave a comment</h4> <label name="CommentMessage">Message</label> <textarea name="CommentMessge"  msg cols="30" rows="5" class="form-control" style="background-color: white;"></textarea>
+                        <h4>Leave a comment</h4> <label>Message</label> <textarea name="CommentMessage"   msg cols="30" rows="5" class="form-control" style="background-color: white;"></textarea>
                     </div>
-                    <div class="form-group"> <label name="SenderEmail">Email</label> <input type="text" name="SenderEmail" class="form-control"> </div>
+                    <div class="form-group"> <label>Email</label> <input type="text" name="SenderEmail" class="form-control"> </div>
                     <div class="form-group" style="text-align:center"> <button type="button" id="sendMessage" class="btn-warning rounded" style="color:black">Post Comment</button> </div>
                 </form>
             </div>
@@ -50,9 +72,10 @@
                 type: "POST",                
                 data: $('#algin-form').serialize(),
                 dataType:'json',
-                success: function (data) {
-                    console.log(data);
+                success: function (data) {                    
                     if (data.success) {
+                        var commentsHeader = document.getElementById('Comments');
+                        $(commentsHeader).remove();
                         var rowToAppend = document.getElementById('rowToAppend');
                         var htmlToAppend = `<div class="comment mt-4 text-justify">
                         <img src="https://i.imgur.com/CFpa3nK.jpg"  alt="" class="rounded-circle" width="40" height="40">

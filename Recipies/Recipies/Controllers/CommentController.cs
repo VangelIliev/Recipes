@@ -39,17 +39,36 @@ namespace Recipies.Controllers
         [HttpGet]
         public async Task<IActionResult> All(string id)
         {
-            var recipe = await this._recipesService.ReadAsync(Guid.Parse(id));
-            var commentViewModel = _mapper.Map<CommentViewModel>(recipe);
+            var recipe = await this._recipesService.ReadAsync(Guid.Parse(id));           
             var allComments = await this._commentService.FindAllAsync();
             var commentsForRecipe = allComments.Where(x => x.RecipeId == id).ToList();
             var recipeCommentsViewModel = _mapper.Map<List<CommentViewModel>>(allComments);
+            this.ViewData["RecipeId"] = id;
             foreach (var commentModel in recipeCommentsViewModel)
             {
-                commentViewModel.RecipeName = recipe.Name;
-                commentViewModel.RecipeId = recipe.Id;                
+                commentModel.RecipeName = recipe.Name;
+                commentModel.RecipeId = recipe.Id;
+                commentModel.ImageUrl = recipe.ImageUrl;
+                
             }
-            
+            foreach (var comments in recipeCommentsViewModel)
+            {
+                foreach (var comment in commentsForRecipe)
+                {
+                    var user = await _userManager.FindByIdAsync(comment.ApplicationUserId);
+                    var userEmail = user.Email;
+                    comments.SenderEmail = userEmail;
+                }
+            }
+            if(recipeCommentsViewModel.Count == 0)
+            {
+                recipeCommentsViewModel.Add(new CommentViewModel
+                {
+                    RecipeId = id,
+                    RecipeName = recipe.Name,
+                    ImageUrl = recipe.ImageUrl
+                });
+            }
             return View(recipeCommentsViewModel);
         }
 
@@ -59,13 +78,17 @@ namespace Recipies.Controllers
         {
             var allUsers = await this._adminService.GetAllUsersAsync();
             var usersViewModels = this._mapper.Map<IList<UserDetailsViewModel>>(allUsers);
-            var isUserRegistered = allUsers.FirstOrDefault(x => x.Email == model.SenderEmail);
+            var isUserRegistered = allUsers.FirstOrDefault(x => x.Email == model.SenderEmail);           
             var user = await this._userManager.GetUserAsync(HttpContext.User);
-            model.CommentCreation = DateTime.Now.ToShortDateString();
+            var currentUserEmail = user.Email;                      
             var userID = user.Id;
             if (!ModelState.IsValid)
             {
                 return Json(new { success = false, message = "Please insert valid form data!" });
+            }
+            if (currentUserEmail != model.SenderEmail)
+            {
+                return Json(new { success = false, message = "You cannot add comment from other users emails" });
             }
             if (isUserRegistered == null)
             {
@@ -76,7 +99,8 @@ namespace Recipies.Controllers
                 Description = model.CommentMessage,
                 RecipeId = model.RecipeId,
                 ApplicationUserId = userID,
-                CreatedOn = DateTime.Now
+                CreatedOn = DateTime.Now,
+                
             };
             await this._commentService.CreateAsync(comment);
             return Json(new { success = true, message = "You have added successfully a comment",commentModel = model });

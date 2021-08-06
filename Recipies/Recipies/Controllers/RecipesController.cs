@@ -23,18 +23,21 @@ namespace Recipies.Controllers
         private readonly ICategoryService _categoryService;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILikeService _likeService;
-        public RecipesController( 
-            IMapper mapper, 
+        private readonly ICommentService _commentService;
+        public RecipesController(
+            IMapper mapper,
             IRecipesService recipesService,
             ICategoryService categoryService,
             UserManager<IdentityUser> userManager,
-            ILikeService likeService)
-        {          
+            ILikeService likeService, 
+            ICommentService commentService)
+        {
             this._mapper = mapper;
             this._recipeService = recipesService;
             this._categoryService = categoryService;
             this._userManager = userManager;
             this._likeService = likeService;
+            this._commentService = commentService;
         }
 
         [HttpGet]
@@ -48,8 +51,10 @@ namespace Recipies.Controllers
                 var recipe = await _recipeService.ReadAsync(Guid.Parse(model.Id));
                 var userName = await _userManager.FindByIdAsync(recipe.ApplicationUserId);
                 var allLlikesOfRecipes = await _likeService.FindAllAsync();
-                var currentRecipeLikes = allLlikesOfRecipes.Where(x => x.RecipeId == model.Id);
+                var currentRecipeLikes = allLlikesOfRecipes.Where(x => x.RecipeId == model.Id).ToList();
                 var currentRecipeLikesCount = currentRecipeLikes.Count();
+                var currentRecipeComments = await _commentService.FindAllAsync();
+                var currentRecipeCommentsCount = currentRecipeComments.Where(x => x.RecipeId == model.Id).ToList().Count();
                 var recipeViewModel = new RecipeViewModel
                 {
                     Id = recipe.Id,
@@ -57,7 +62,7 @@ namespace Recipies.Controllers
                     TimeToPrepare = recipe.TimeToPrepare,
                     ImageUrl = recipe.ImageUrl,
                     CreatedBy = userName.Email,
-                    NumberOfComments = recipe.NumberOfComments,
+                    NumberOfComments = currentRecipeCommentsCount,
                     NumberOfLikes = currentRecipeLikesCount,
                     Name = recipe.Name
                 };
