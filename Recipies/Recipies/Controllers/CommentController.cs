@@ -42,7 +42,7 @@ namespace Recipies.Controllers
             var recipe = await this._recipesService.ReadAsync(Guid.Parse(id));           
             var allComments = await this._commentService.FindAllAsync();
             var commentsForRecipe = allComments.Where(x => x.RecipeId == id).ToList();
-            var recipeCommentsViewModel = _mapper.Map<List<CommentViewModel>>(allComments);
+            var recipeCommentsViewModel = _mapper.Map<List<CommentViewModel>>(commentsForRecipe);
             this.ViewData["RecipeId"] = id;
             foreach (var commentModel in recipeCommentsViewModel)
             {
@@ -92,7 +92,7 @@ namespace Recipies.Controllers
             }
             if (isUserRegistered == null)
             {
-                return Json(new { success = false, message = "There isn't registered user with this Email address!" });
+                return Json(new { success = false, message = "There isn't registered user w*-ith this Email address!" });
             }
             var comment = new CommentModel
             {

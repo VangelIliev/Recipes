@@ -96,11 +96,21 @@ namespace Recipies.Controllers
         }
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult> RemoveRecipe(string id)
+        public async Task<ActionResult> RemoveRecipe(string id) 
         {
-            var recipe = await _recipeService.ReadAsync(Guid.Parse(id));
-            await _recipeService.DeleteAsync(recipe);
-            return this.Redirect("All");
+            try
+            {
+                var recipe = await _recipeService.ReadAsync(Guid.Parse(id));
+                var ricipeId = new Guid(id.ToUpper());
+                await _recipeService.DeleteAsync(ricipeId);
+                return this.RedirectToAction("All","Recipes");
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+            
         }
 
         [HttpGet]
