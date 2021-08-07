@@ -22,8 +22,6 @@ namespace Recipes.Domain.Models
 
         public string CreatedOn { get; set; }
 
-        public int NumberOfLikes { get; set; }
-
         public int NumberOfComments { get; set; }
 
         public int TotalCalories { get; set; }

@@ -28,8 +28,6 @@ namespace Recipies.Data.Models.Entities
         [Required]
         public DateTime CreatedOn { get; set; }
         [Required]
-        public int NumberOfLikes { get; set; }
-        [Required]
         public int NumberOfComments { get; set; }
         public int TotalCalories { get; set; }
         public string ApplicationUserId { get; set; }

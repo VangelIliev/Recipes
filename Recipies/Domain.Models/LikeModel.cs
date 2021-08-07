@@ -10,7 +10,7 @@ namespace Recipes.Domain.Models
     {
         public Guid Id { get; set; }
 
-        public string RecipeId { get; set; }       
+        public Guid RecipeId { get; set; }       
 
         //add user
 

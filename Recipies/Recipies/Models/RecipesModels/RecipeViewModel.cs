@@ -28,7 +28,9 @@ namespace Recipies.Models.RecipesModels
         public DateTime CreatedOn { get; set; }
         
         public int NumberOfLikes { get; set; }
-        
+
+        public int NumberOfDislikes { get; set; }
+
         public int NumberOfComments { get; set; }
 
         public int TotalCalories { get; set; }

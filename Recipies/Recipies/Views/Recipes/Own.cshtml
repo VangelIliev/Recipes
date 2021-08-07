@@ -1,6 +1,15 @@
 ﻿@model List<RecipeViewModel>
 <div class="container">
     <div class="row">
+        @if (Model.Count == 0)
+        {
+            <div class="card col-md-4 mt-4 offset-3" style="width: 18rem;text-align:center">                
+                <div class="card-body">
+                    <h5 class="card-title">There are no recipes for your account Please add recipes</h5>                    
+                    <a asp-controller="Recipes" asp-action="Add" class="btn btn-primary" style="text-align:center">Add Recipes</a>                   
+                </div>
+            </div>            
+        }
         @foreach (var recipe in Model)
         {
             <div class="card col-md-4" style="width: 18rem;text-align:center">
@@ -9,7 +18,7 @@
                     <h5 class="card-title">@recipe.Name</h5>
                     <p class="card-text">@recipe.PreparationDescription</p>
                     <p>Likes - @recipe.NumberOfLikes</p>
-                    <p>Comments - @recipe.NumberOfComments</p>                    
+                    <p>Comments - @recipe.NumberOfComments</p>
                     <a asp-controller="Recipes" asp-action="RemoveRecipe" class="btn btn-danger" asp-route-id="@recipe.Id" style="text-align:center">Remove</a>
                     <a asp-controller="Recipes" asp-action="UpdateRecipe" class="btn btn-info" asp-route-id="@recipe.Id" style="text-align:center">Update</a>
                 </div>

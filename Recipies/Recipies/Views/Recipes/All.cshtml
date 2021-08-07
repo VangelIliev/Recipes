@@ -12,10 +12,10 @@
                     Likes  -  <span id="numberOfLikes-@recipe.Id">@recipe.NumberOfLikes </span>
                     @if (this.User.Identity.IsAuthenticated)
                     {
-                        <button class="like" id="likeBtn">
+                        <button class="like likeBtn" id="@recipe.Id">
                             <i class="fa fa-thumbs-o-up" id="@recipe.Id" aria-hidden="true"></i>
                         </button>
-                        <button class="dislike" id="dislikeBtn">
+                        <button class="dislike dislikeBtn" id="@recipe.Id">
                             <i class="fa fa-thumbs-o-down" id="@recipe.Id" aria-hidden="true"></i>
                         </button>
 
@@ -46,11 +46,10 @@
     </div>
 @section Scripts { 
     <script>
-        var btnLike = document.getElementById('likeBtn');
-        var btnDislike = document.getElementById('dislikeBtn');
-        
-        $(".like").click(function (e) {
-            
+        var btnLike = document.getElementsByClassName('likeBtn')[0];
+        console.log(btnLike);
+        var btnDislike = document.getElementsByClassName('dislikeBtn')[0];
+        btnLike.addEventListener('click', function (e) {
             $.ajax({
                 url: `/Likes/LikeRecipe/${e.target.id}`,
                 type: "POST",
@@ -71,9 +70,8 @@
                     window.alert("Unable to like recipe");
                 }
             });
-            
-        });
-        $(".dislike").click(function (e) {
+        })
+        btnDislike.addEventListener('click', function (e) {
             $.ajax({
                 url: `/Likes/DisLikeRecipe/${e.target.id}`,
                 type: "POST",
@@ -94,9 +92,6 @@
                     window.alert("Unable to dislike recipe");
                 }
             });
-            
-            
-        });
-        
+        })
     </script>
 }

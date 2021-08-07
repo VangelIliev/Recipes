@@ -24,13 +24,15 @@ namespace Recipies.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILikeService _likeService;
         private readonly ICommentService _commentService;
+        private readonly IRecipeDislikesService _recipeDislikesService;
         public RecipesController(
             IMapper mapper,
             IRecipesService recipesService,
             ICategoryService categoryService,
             UserManager<IdentityUser> userManager,
             ILikeService likeService, 
-            ICommentService commentService)
+            ICommentService commentService,
+            IRecipeDislikesService recipeDislikesService)
         {
             this._mapper = mapper;
             this._recipeService = recipesService;
@@ -38,6 +40,7 @@ namespace Recipies.Controllers
             this._userManager = userManager;
             this._likeService = likeService;
             this._commentService = commentService;
+            this._recipeDislikesService = recipeDislikesService;
         }
 
         [HttpGet]
@@ -50,9 +53,17 @@ namespace Recipies.Controllers
             {
                 var recipe = await _recipeService.ReadAsync(Guid.Parse(model.Id));
                 var userName = await _userManager.FindByIdAsync(recipe.ApplicationUserId);
+                //All likes
                 var allLlikesOfRecipes = await _likeService.FindAllAsync();
-                var currentRecipeLikes = allLlikesOfRecipes.Where(x => x.RecipeId == model.Id).ToList();
+                var currentRecipeLikes = allLlikesOfRecipes.Where(x => x.RecipeId == Guid.Parse(model.Id)).ToList();
                 var currentRecipeLikesCount = currentRecipeLikes.Count();
+
+                //All Dislikes
+                var allDisLlikesOfRecipes = await _recipeDislikesService.FindAllAsync();
+                var currentRecipeDisLikes = allDisLlikesOfRecipes.Where(x => x.RecipeId == Guid.Parse(model.Id)).ToList();
+                var currentRecipeDisLikesCount = currentRecipeDisLikes.Count();
+
+                var numberOfLikes = currentRecipeLikesCount - currentRecipeDisLikesCount;
                 var currentRecipeComments = await _commentService.FindAllAsync();
                 var currentRecipeCommentsCount = currentRecipeComments.Where(x => x.RecipeId == model.Id).ToList().Count();
                 var recipeViewModel = new RecipeViewModel
@@ -63,7 +74,7 @@ namespace Recipies.Controllers
                     ImageUrl = recipe.ImageUrl,
                     CreatedBy = userName.Email,
                     NumberOfComments = recipe.NumberOfComments,
-                    NumberOfLikes = recipe.NumberOfLikes,
+                    NumberOfLikes = numberOfLikes,
                     Name = recipe.Name
                 };
                 recipeViewModels.Add(recipeViewModel);
@@ -89,7 +100,7 @@ namespace Recipies.Controllers
         {
             var recipe = await _recipeService.ReadAsync(Guid.Parse(id));
             var recipeLikes = await _likeService.FindAllAsync();
-            var likesCount = recipeLikes.Where(x => x.RecipeId == id).Count();            
+            var likesCount = recipeLikes.Where(x => x.RecipeId == Guid.Parse(id)).Count();            
             var recipeViewModel = _mapper.Map<RecipeViewModel>(recipe);
             recipeViewModel.NumberOfLikes = likesCount;
             return View(recipeViewModel);
