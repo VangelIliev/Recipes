@@ -62,8 +62,8 @@ namespace Recipies.Controllers
                     TimeToPrepare = recipe.TimeToPrepare,
                     ImageUrl = recipe.ImageUrl,
                     CreatedBy = userName.Email,
-                    NumberOfComments = currentRecipeCommentsCount,
-                    NumberOfLikes = currentRecipeLikesCount,
+                    NumberOfComments = recipe.NumberOfComments,
+                    NumberOfLikes = recipe.NumberOfLikes,
                     Name = recipe.Name
                 };
                 recipeViewModels.Add(recipeViewModel);
@@ -97,20 +97,11 @@ namespace Recipies.Controllers
         [HttpGet]
         [Authorize]
         public async Task<ActionResult> RemoveRecipe(string id) 
-        {
-            try
-            {
-                var recipe = await _recipeService.ReadAsync(Guid.Parse(id));
-                var ricipeId = new Guid(id.ToUpper());
-                await _recipeService.DeleteAsync(ricipeId);
-                return this.RedirectToAction("All","Recipes");
-            }
-            catch (Exception e)
-            {
-
-                throw;
-            }
-            
+        {           
+            var recipe = await _recipeService.ReadAsync(Guid.Parse(id));
+            var ricipeId = new Guid(id.ToUpper());
+            await _recipeService.DeleteAsync(ricipeId);
+            return this.RedirectToAction("All","Recipes");                                
         }
 
         [HttpGet]

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Recipes.Data.Models.Entities;
 using Recipes.Domain.Models;
 using Recipies.Data.Models.Entities;
 using Recipies.Models.AdminModels;
@@ -48,6 +49,9 @@ namespace Recipies.Mapping
             CreateMap<CommentViewModel, RecipeModel>();
             CreateMap<CommentModel, CommentViewModel>();
             CreateMap<CommentViewModel, CommentModel>();
+
+            CreateMap<RecipeDislikesModel, RecipeDislikes>();
+            CreateMap<RecipeDislikes, RecipeDislikesModel>();
         }
     }
 }

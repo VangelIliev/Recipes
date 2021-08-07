@@ -31,6 +31,7 @@ namespace Recipies.Data.Models.DbContext
         public DbSet<RecipeProducts> RecipeProducts { get; set; }
 
         public DbSet<Image> Images { get; set; }
-        
+
+        public DbSet<RecipeDislikes> RecipeDislikes { get; set; }
     }
 }

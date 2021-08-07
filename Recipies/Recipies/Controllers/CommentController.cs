@@ -102,6 +102,9 @@ namespace Recipies.Controllers
                 CreatedOn = DateTime.Now,
                 
             };
+            var recipe = await this._recipesService.ReadAsync(Guid.Parse(model.RecipeId));
+            recipe.NumberOfComments++;
+            await this._recipesService.UpdateAsync(recipe);
             await this._commentService.CreateAsync(comment);
             return Json(new { success = true, message = "You have added successfully a comment",commentModel = model });
         }

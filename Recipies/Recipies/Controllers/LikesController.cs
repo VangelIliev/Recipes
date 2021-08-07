@@ -15,10 +15,15 @@ namespace Recipies.Controllers
     {
         private readonly ILikeService _likeService;
         private readonly UserManager<IdentityUser> _userManager;
-        public LikesController(ILikeService likeService, UserManager<IdentityUser> userManager)
+        private readonly IRecipesService _recipesService;
+        public LikesController(
+            ILikeService likeService, 
+            UserManager<IdentityUser> userManager,
+            IRecipesService recipesService)
         {
             this._likeService = likeService;
             this._userManager = userManager;
+            this._recipesService = recipesService;
         }
         [HttpPost]
         public async Task<ActionResult> LikeRecipe(string id)
@@ -39,6 +44,9 @@ namespace Recipies.Controllers
             };
 
             await this._likeService.CreateAsync(likeModel);
+            var recipe = await this._recipesService.ReadAsync(Guid.Parse(id));
+            recipe.NumberOfLikes++;
+            await this._recipesService.UpdateAsync(recipe);
             return Json(new {success = true, id = id });
         }
 
@@ -57,6 +65,9 @@ namespace Recipies.Controllers
             var likedRecipeByUser = likesForCurrentRecipe.FirstOrDefault(x => x.ApplicationUserId == userID);
 
             await this._likeService.DeleteAsync(likedRecipeByUser);
+            var recipe = await this._recipesService.ReadAsync(Guid.Parse(id));
+            recipe.NumberOfLikes--;
+            await this._recipesService.UpdateAsync(recipe);
             return Json(new { success = true, id = id });
         }
 
