@@ -61,6 +61,7 @@ namespace Recipies
             services.AddTransient<IRecipesRepository, RecipesRepository>();
             services.AddTransient<IRolesRepository, RolesRepository>();
             services.AddTransient<IRecipeDislikesRepository, RecipeDislikesRepository>();
+            services.AddTransient<IRecipeProductsRepository, RecipeProductsRepository>();
 
             //SERVICES
             services.AddTransient<IAdminService, AdminService>();
@@ -70,7 +71,7 @@ namespace Recipies
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IRecipesService, RecipesService>();
             services.AddTransient<IRecipeDislikesService, RecipeDislikesService>();
-            
+            services.AddTransient<IRecipeProductsService, RecipeProductsService>();
         }
 
         

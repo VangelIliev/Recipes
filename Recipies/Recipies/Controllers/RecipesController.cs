@@ -25,14 +25,17 @@ namespace Recipies.Controllers
         private readonly ILikeService _likeService;
         private readonly ICommentService _commentService;
         private readonly IRecipeDislikesService _recipeDislikesService;
+        private readonly IProductService _productService;
+        private readonly IRecipeProductsService _recipeProductsService;
         public RecipesController(
             IMapper mapper,
             IRecipesService recipesService,
             ICategoryService categoryService,
             UserManager<IdentityUser> userManager,
-            ILikeService likeService, 
+            ILikeService likeService,
             ICommentService commentService,
-            IRecipeDislikesService recipeDislikesService)
+            IRecipeDislikesService recipeDislikesService,
+            IProductService productService, IRecipeProductsService recipeProductsService)
         {
             this._mapper = mapper;
             this._recipeService = recipesService;
@@ -41,6 +44,8 @@ namespace Recipies.Controllers
             this._likeService = likeService;
             this._commentService = commentService;
             this._recipeDislikesService = recipeDislikesService;
+            this._productService = productService;
+            this._recipeProductsService = recipeProductsService;
         }
 
         [HttpGet]
@@ -178,16 +183,53 @@ namespace Recipies.Controllers
             {
                 return View(model);
             }
-            model.CreatedOn = System.DateTime.UtcNow;           
+            model.CreatedOn = System.DateTime.UtcNow;
             var user = await this._userManager.GetUserAsync(HttpContext.User);
             var userID = user.Id;
             model.ApplicationUserId = userID;
             model.CategoryId = model.CategoryId;
             model.NumberOfComments = 0;
             model.NumberOfLikes = 0;
+            var productsIds = new List<Guid>();
+            foreach (var inputIngredient in model.Ingredients)
+            {
+                var ingredients = await this._productService.FindAllAsync();
+                var ingredient = ingredients.FirstOrDefault(x => x.Name == inputIngredient.IngredientName);
+                if (ingredient == null)
+                {
+                    ingredient = new ProductModel
+                    {
+                        Name = inputIngredient.IngredientName,
+                    };
+                    var id = await this._productService.CreateAsync(ingredient);
+                    productsIds.Add(id);
+                }
+                productsIds.Add(ingredient.Id);
+            }
             var recipeModelData = _mapper.Map<RecipeModel>(model);
-            await _recipeService.CreateAsync(recipeModelData);
-
+             
+            var recipeId = await _recipeService.CreateAsync(recipeModelData);
+            var counter = 0;
+            for (int i = counter; i < model.Ingredients.Count;)
+            {
+                if (counter == model.Ingredients.Count)
+                {
+                    break;
+                }
+                foreach (var product in productsIds)
+                {
+                    var recipeProduct = new RecipeProductsModel
+                    {
+                        RecipeId = recipeId,
+                        ProductId = product,
+                        Quantity = model.Ingredients[counter].Quantity
+                    };
+                    await this._recipeProductsService.CreateAsync(recipeProduct);
+                    counter++;
+                    break;
+                    
+                }
+            }                                     
             return RedirectToAction("All");
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Recipies.Data.Models.Entities;
+using Recipies.Views.Recipes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -45,7 +46,7 @@ namespace Recipies.Models.RecipesModels
 
         public Dictionary<string,string> Categories { get; set; }
         
-        public Dictionary<string,string> RecipeProducts { get; set; }
+        public List<RecipeIngredientInputModel> Ingredients { get; set; }
 
         
     }

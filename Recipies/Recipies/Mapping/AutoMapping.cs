@@ -52,6 +52,9 @@ namespace Recipies.Mapping
 
             CreateMap<RecipeDislikesModel, RecipeDislikes>();
             CreateMap<RecipeDislikes, RecipeDislikesModel>();
+
+            CreateMap<RecipeProducts, RecipeProductsModel>();
+            CreateMap<RecipeProductsModel, RecipeProducts>();
         }
     }
 }

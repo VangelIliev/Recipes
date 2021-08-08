@@ -12,7 +12,7 @@ namespace Recipes.Domain.Models
 
         public const int ProductNameMaxLength = 15;
 
-        public const int RecipeDescriptionMaxLength = 300;
+        public const int RecipeDescriptionMaxLength = 1000;
 
         public const int RecipeDescriptionMinLength = 30;
 
