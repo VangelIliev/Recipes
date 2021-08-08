@@ -42,6 +42,8 @@ namespace Recipies.Mapping
             CreateMap<CategoryModel, AddCategoryViewModel>();
             CreateMap<Category, CategoryModel>();
             CreateMap<CategoryModel, Category>();
+            CreateMap<CategoryModel, CategoryViewModel>();
+            CreateMap<CategoryViewModel, CategoryModel>();
 
             CreateMap<RecipeModel, CommentModel>();
             CreateMap<CommentModel, RecipeModel>();

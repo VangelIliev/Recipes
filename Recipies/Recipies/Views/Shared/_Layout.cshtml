@@ -22,6 +22,7 @@
                     <li class="nav-item active">
                         <a class="nav-link" asp-controller="Recipes" asp-action="All">All Recipes <span class="sr-only">(current)</span></a>
                     </li>
+                    @await Component.InvokeAsync("RecipeCategories")
                     @if (this.User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item">
@@ -30,6 +31,7 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Recipes" asp-action="Own">My Recipes</a>
                         </li>
+
                     }
                     @if (this.User.IsInRole("Administrator"))
                     {
