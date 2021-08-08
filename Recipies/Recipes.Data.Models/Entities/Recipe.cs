@@ -36,7 +36,7 @@ namespace Recipies.Data.Models.Entities
         public Category Category { get; set; }              
         public IEnumerable<Like> Likes { get; set; } = new List<Like>();
         public IEnumerable<Comment> Comments { get; set; } = new List<Comment>();
-        public IEnumerable<RecipeProducts> Ingredients { get; set; } = new List<RecipeProducts>();
+        public List<RecipeProducts> Ingredients { get; set; } = new List<RecipeProducts>();
 
         public IEnumerable<Image>  Images { get; set; } = new List<Image>();
     }
