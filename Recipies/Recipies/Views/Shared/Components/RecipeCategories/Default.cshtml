@@ -4,7 +4,7 @@
         <div class="dropdown-menu">
             @foreach (var item in Model)
             {
-                <a class="dropdown-item" asp-controller="Category" asp-action="FilterRecipes" asp-route-id="@item.Name">@item.Name</a>
+                <a class="dropdown-item" asp-controller="Category" asp-action="Filter" asp-route-id="@item.Id">@item.Name</a>
             }
         </div>
     </li>

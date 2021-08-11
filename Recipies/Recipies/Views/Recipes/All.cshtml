@@ -7,7 +7,7 @@
             <img class="card-img-top" src="@recipe.ImageUrl" alt="Card image cap">
             <div class="card-body">
                 <h5 class="card-title">@recipe.Name</h5>
-                <input type="hidden" value="@recipe" />
+                <input type="hidden" value="@recipe.Id" />
                 <p>
                     Likes  -  <span id="numberOfLikes-@recipe.Id">@recipe.NumberOfLikes </span>
                     @if (this.User.Identity.IsAuthenticated)
