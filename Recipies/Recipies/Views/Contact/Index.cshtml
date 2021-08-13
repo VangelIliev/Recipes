@@ -1,26 +1,27 @@
-﻿<form class="form-horizontal" role="form" method="post" action="index.php">
+﻿@model EmailInputFormModel
+<form class="form-horizontal" role="form" asp-controller="Contact" asp-action="Index" method="post">
     <div class="form-group">
-        <label for="name" class="col-sm-2 control-label">Name</label>
+        <label asp-for="Name" class="col-sm-2 control-label"></label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="name" name="name" placeholder="First & Last Name" value="">
+            <input type="text" class="form-control" id="name" asp-for="Name" placeholder="First & Last Name">
         </div>
     </div>
     <div class="form-group">
-        <label for="email" class="col-sm-2 control-label">Email</label>
+        <label asp-for="Email" class="col-sm-2 control-label">Email</label>
         <div class="col-sm-10">
-            <input type="email" class="form-control" id="email" name="email" placeholder="example@domain.com" value="">
+            <input asp-for="Email" class="form-control" id="email" placeholder="example@domain.com">
         </div>
     </div>
     <div class="form-group">
-        <label for="message" class="col-sm-2 control-label">Message</label>
+        <label asp-for="Message" class="col-sm-2 control-label">Message</label>
         <div class="col-sm-10">
-            <textarea class="form-control" rows="4" name="message"></textarea>
+            <textarea class="form-control" rows="4" asp-for="Message"></textarea>
         </div>
     </div>
     <div class="form-group">
-        <label for="human" class="col-sm-2 control-label">2 + 3 = ?</label>
+        <label asp-for="Answer" class="col-sm-2 control-label">2 + 3 = ?</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="human" name="human" placeholder="Your Answer">
+            <input type="text" class="form-control" id="human" asp-for="Answer" placeholder="Your Answer">
         </div>
     </div>
     <div class="form-group">
@@ -28,9 +29,5 @@
             <input id="submit" name="submit" type="submit" value="Send" class="btn btn-primary">
         </div>
     </div>
-    <div class="form-group">
-        <div class="col-sm-10 col-sm-offset-2">
-            <! Will be used to display an alert to the user>
-        </div>
-    </div>
+    
 </form>
