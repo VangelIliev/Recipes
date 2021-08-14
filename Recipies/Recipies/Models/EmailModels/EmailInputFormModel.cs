@@ -16,5 +16,7 @@ namespace Recipies.Models.EmailModels
         public string Message { get; set; }
 
         public string Answer  { get; set; }
+
+        public string Subject { get; set; }
     }
 }
