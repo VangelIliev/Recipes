@@ -1,0 +1,15 @@
+﻿@model RemoveCategoryModel
+
+@{
+    var categoryItems = Model.Categories.Select(x => new SelectListItem(x.Key, x.Value));
+}
+<form asp-controller="Category" asp-action="RemoveCategory" method="post">   
+        <div class="form-group">
+            <label asp-for="Category" class="control-label"></label>
+            <select asp-for="Id" class="form-control" asp-items="categoryItems">
+            </select>
+            <span asp-validation-for="Category" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-danger">Remove category</button>    
+</form>
+

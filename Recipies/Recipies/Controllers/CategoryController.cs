@@ -35,11 +35,10 @@ namespace Recipies.Controllers
         }
 
         [HttpGet]
-
-        public IActionResult AddCategory()
+        public ActionResult AddCategory()
         {
-            AddCategoryViewModel model = new AddCategoryViewModel();
-            return View("AddCategory", model);
+            
+            return View("AddCategory");
         }
 
         [HttpPost]
@@ -49,6 +48,30 @@ namespace Recipies.Controllers
             var categoryModel = _mapper.Map<CategoryModel>(model);
             await _categoryService.CreateAsync(categoryModel);
             return Redirect("/Recipes/All");
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> RemoveCategory()
+        {
+            var categories = await _categoryService.FindAllAsync();            
+            var selectList = new Dictionary<string,string>();
+            foreach (var category in categories)
+            {
+                selectList.Add(category.Name,category.Id.ToString());
+            }
+            var removeCategoryModel = new RemoveCategoryModel
+            {
+                Categories = selectList
+            };
+            return View(removeCategoryModel);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> RemoveCategory(RemoveCategoryModel model)
+        {
+            var category = await _categoryService.ReadAsync(Guid.Parse(model.Id));
+            await _categoryService.DeleteAsync(category);
+            return RedirectToAction("All","Recipes");
         }
     }
 }

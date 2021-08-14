@@ -27,15 +27,19 @@
                         <a class="btn btn-outline-primary ml-2" asp-controller="Comment" asp-action="All" asp-route-id="@recipe.Id">Add comment</a>
                     }
 
-                        <p>Owner - @recipe.CreatedBy</p>
+                <p>Owner - @recipe.CreatedBy</p>
                 @if (this.User.Identity.IsAuthenticated)
                 {
                     if (this.User.IsInRole("Administrator"))
                     {
-                        <a asp-controller="Admin" asp-action="DeleteRecipe" class="btn btn-primary" asp-route-id="@recipe.Id" style="text-align:center">Delete Recipe</a>
+                        <a asp-controller="Admin" asp-action="DeleteRecipe" class="btn btn-danger" asp-route-id="@recipe.Id" style="text-align:center">Delete Recipe</a>
                         <a asp-controller="Recipes" asp-action="Details" class="btn btn-primary" asp-route-id="@recipe.Id" style="text-align:center">Details</a>
                     }
-                    <a asp-controller="Recipes" asp-action="Details" class="btn btn-primary" asp-route-id="@recipe.Id" style="text-align:center">Details</a>
+                    else
+                    {
+                        <a asp-controller="Recipes" asp-action="Details" class="btn btn-primary" asp-route-id="@recipe.Id" style="text-align:center">Details</a>
+                    }
+
                 }
 
             </div>
