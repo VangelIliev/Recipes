@@ -9,7 +9,7 @@
                 <h5 class="card-title">@recipe.Name</h5>
                 <input type="hidden" value="@recipe.Id" />
                 <p>
-                    Likes  -  <span id="numberOfLikes-@recipe.Id">@recipe.NumberOfLikes </span>
+                    Likes  :  <span id="numberOfLikes-@recipe.Id">@recipe.NumberOfLikes </span>
                     @if (this.User.Identity.IsAuthenticated)
                     {
                         <button class="like likeBtn" id="@recipe.Id">
@@ -45,52 +45,56 @@
     </div>
 @section Scripts { 
     <script>
-        var btnLike = document.getElementsByClassName('likeBtn')[0];
-        console.log(btnLike);
-        var btnDislike = document.getElementsByClassName('dislikeBtn')[0];
-        btnLike.addEventListener('click', function (e) {
-            $.ajax({
-                url: `/Likes/LikeRecipe/${e.target.id}`,
-                type: "POST",
-                dataType: "json",
-                data: { "id": e.target.id },
-                success: function (data) {
-                    if (data.success) {
-                        var numberOfLikesSpan = document.getElementById(`numberOfLikes-${data.id}`);
-                        var numberOfLikes = numberOfLikesSpan.innerText;
-                        var numberOfLikesAsNumber = Number.parseInt(numberOfLikes);
-                        numberOfLikesAsNumber++;
-                        numberOfLikesSpan.innerText = numberOfLikesAsNumber;
-                    } else {
-                        window.alert(data.message);
-                    };
-                },
-                error: function (error) {
-                    window.alert("Unable to like recipe");
-                }
-            });
-        })
-        btnDislike.addEventListener('click', function (e) {
-            $.ajax({
-                url: `/Likes/DisLikeRecipe/${e.target.id}`,
-                type: "POST",
-                dataType: "json",
-                data: { "id": e.target.id },
-                success: function (data) {
-                    if (data.success) {
-                        var numberOfLikesSpan = document.getElementById(`numberOfLikes-${e.target.id}`);
-                        var numberOfLikes = numberOfLikesSpan.innerText;
-                        var numberOfLikesAsNumber = Number.parseInt(numberOfLikes);
-                        numberOfLikesAsNumber--;
-                        numberOfLikesSpan.innerText = numberOfLikesAsNumber;
-                    } else {
-                        window.alert(data.message);
-                    };
-                },
-                error: function (error) {
-                    window.alert("Unable to dislike recipe");
-                }
-            });
-        })
+        var btnLike = document.getElementsByClassName('likeBtn');
+        for (var i = 0; i < btnLike.length; i++) {
+            btnLike[i].addEventListener('click', function (e) {
+                $.ajax({
+                    url: `/Likes/LikeRecipe/${e.target.id}`,
+                    type: "POST",
+                    dataType: "json",
+                    data: { "id": e.target.id },
+                    success: function (data) {
+                        if (data.success) {
+                            var numberOfLikesSpan = document.getElementById(`numberOfLikes-${data.id}`);
+                            var numberOfLikes = numberOfLikesSpan.innerText;
+                            var numberOfLikesAsNumber = Number.parseInt(numberOfLikes);
+                            numberOfLikesAsNumber++;
+                            numberOfLikesSpan.innerText = numberOfLikesAsNumber;
+                        } else {
+                            window.alert(data.message);
+                        };
+                    },
+                    error: function (error) {
+                        window.alert("Unable to like recipe");
+                    }
+                });
+            })
+        }        
+        var btnDislike = document.getElementsByClassName('dislikeBtn');
+        for (var i = 0; i < btnDislike.length; i++) {
+            btnDislike[i].addEventListener('click', function (e) {
+                $.ajax({
+                    url: `/Likes/DisLikeRecipe/${e.target.id}`,
+                    type: "POST",
+                    dataType: "json",
+                    data: { "id": e.target.id },
+                    success: function (data) {
+                        if (data.success) {
+                            var numberOfLikesSpan = document.getElementById(`numberOfLikes-${e.target.id}`);
+                            var numberOfLikes = numberOfLikesSpan.innerText;
+                            var numberOfLikesAsNumber = Number.parseInt(numberOfLikes);
+                            numberOfLikesAsNumber--;
+                            numberOfLikesSpan.innerText = numberOfLikesAsNumber;
+                        } else {
+                            window.alert(data.message);
+                        };
+                    },
+                    error: function (error) {
+                        window.alert("Unable to dislike recipe");
+                    }
+                });
+            })
+        }
+        
     </script>
 }
