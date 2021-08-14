@@ -111,24 +111,6 @@ namespace Recipies.Controllers
             await this._signInManager.SignOutAsync();
             return RedirectToAction("All", "Recipes");
         }
-
-        [HttpGet]
-        
-        public IActionResult AddCategory()
-        {
-            AddCategoryViewModel model = new AddCategoryViewModel();
-            return View("AddCategory",model);
-        }
-
-        [HttpPost]
-        
-        public async Task<ActionResult> AddCategory(AddCategoryViewModel model)
-        {
-            var categoryModel = _mapper.Map<CategoryModel>(model);
-            await _categoryService.CreateAsync(categoryModel);
-            return Redirect("/Recipes/All");
-        }
-
         [HttpGet]
         public IActionResult CreateUser()
         {

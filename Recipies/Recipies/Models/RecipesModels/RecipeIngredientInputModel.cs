@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Recipies.Views.Recipes
+namespace Recipies.Models.RecipesModels
 {
     public class RecipeIngredientInputModel
     {

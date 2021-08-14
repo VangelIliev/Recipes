@@ -51,15 +51,17 @@ namespace Recipies.Controllers
                 commentModel.ImageUrl = recipe.ImageUrl;
                 
             }
-            foreach (var comments in recipeCommentsViewModel)
+            for (int i = 0; i < recipeCommentsViewModel.Count; i++)
             {
-                foreach (var comment in commentsForRecipe)
+                for (int j = 0; j < commentsForRecipe.Count; j++)
                 {
-                    var user = await _userManager.FindByIdAsync(comment.ApplicationUserId);
+                    var user = await _userManager.FindByIdAsync(commentsForRecipe[j].ApplicationUserId);
                     var userEmail = user.Email;
-                    comments.SenderEmail = userEmail;
+                    recipeCommentsViewModel[i].SenderEmail = userEmail;
+                    i++;
                 }
-            }
+                break;
+            }                                                        
             if(recipeCommentsViewModel.Count == 0)
             {
                 recipeCommentsViewModel.Add(new CommentViewModel

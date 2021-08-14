@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Recipes.Domain.Contracts;
+using Recipes.Domain.Models;
+using Recipies.Models.AdminModels;
 using Recipies.Models.RecipesModels;
 using System;
 using System.Collections.Generic;
@@ -30,6 +32,23 @@ namespace Recipies.Controllers
             var filteredRecipes = recipes.Where(x => x.CategoryId == Guid.Parse(id));
             var recipesViewModel = _mapper.Map<List<RecipeViewModel>>(filteredRecipes);
             return View(recipesViewModel);
+        }
+
+        [HttpGet]
+
+        public IActionResult AddCategory()
+        {
+            AddCategoryViewModel model = new AddCategoryViewModel();
+            return View("AddCategory", model);
+        }
+
+        [HttpPost]
+
+        public async Task<ActionResult> AddCategory(AddCategoryViewModel model)
+        {
+            var categoryModel = _mapper.Map<CategoryModel>(model);
+            await _categoryService.CreateAsync(categoryModel);
+            return Redirect("/Recipes/All");
         }
     }
 }
