@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Recipes.Data.Contracts;
 using Recipes.Data.Implementation;
 using Recipes.Data.Models.Entities;
 using Recipes.Domain.Contracts;
@@ -13,8 +14,8 @@ namespace Recipes.Domain.Implementation
 {
     public class ImageService : ServiceBase, IImageService
     {
-        private readonly ImageRepository _imageRepository;
-        public ImageService(ImageRepository imageRepository, IMapper automapper) : base(automapper)
+        private readonly IImagesRepository _imageRepository;
+        public ImageService(IImagesRepository imageRepository, IMapper automapper) : base(automapper)
         {
             this._imageRepository = imageRepository;
         }

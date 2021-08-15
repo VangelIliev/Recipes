@@ -12,10 +12,7 @@ namespace Recipies.Models.RecipesModels
     {
 
         public string Id { get; set; }
-        [Required]
-        public string ImageUrl { get; set; }
-
-        public List<IFormFile> Images { get; set; }
+        public List<IFormFile> Images { get; set; }        
         [MaxLength(20)]
         public string Name { get; set; }
 
@@ -23,8 +20,7 @@ namespace Recipies.Models.RecipesModels
         public int PortionsSize { get; set; }
         [Required]
         public int TimeToPrepare { get; set; }
-        [Required]
-        [MaxLength(RecipeDescriptionMaxLength)]
+        [Required]        
         [MinLength(10)]
         public string PreparationDescription { get; set; }
         
@@ -50,6 +46,8 @@ namespace Recipies.Models.RecipesModels
         
         public List<RecipeIngredientInputModel> Ingredients { get; set; }
 
-        
+        public List<string> ImagesFilePaths { get; set; }
+
+
     }
 }

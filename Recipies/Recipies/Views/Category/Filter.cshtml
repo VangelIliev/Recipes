@@ -4,7 +4,7 @@
         @foreach (var recipe in Model)
         {
             <div class="card col-md-4" style="width: 18rem;text-align:left">
-                <img class="card-img-top" src="@recipe.ImageUrl" alt="Card image cap">
+                @*<img class="card-img-top" src="@recipe.ImageUrl" alt="Card image cap">*@
                 <div class="card-body">
                     <h5 class="card-title">@recipe.Name</h5>
                     <input type="hidden" value="@recipe.Id" />

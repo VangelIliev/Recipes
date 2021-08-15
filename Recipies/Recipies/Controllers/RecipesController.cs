@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 using System.Security.Claims;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace Recipies.Controllers
 {
@@ -27,6 +30,8 @@ namespace Recipies.Controllers
         private readonly IRecipeDislikesService _recipeDislikesService;
         private readonly IProductService _productService;
         private readonly IRecipeProductsService _recipeProductsService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IImageService _imageService;
         
         public RecipesController(
             IMapper mapper,
@@ -36,7 +41,10 @@ namespace Recipies.Controllers
             ILikeService likeService,
             ICommentService commentService,
             IRecipeDislikesService recipeDislikesService,
-            IProductService productService, IRecipeProductsService recipeProductsService)
+            IProductService productService, 
+            IRecipeProductsService recipeProductsService,
+            IImageService imageService,
+            IWebHostEnvironment webHostEnvironment)
         {
             this._mapper = mapper;
             this._recipeService = recipesService;
@@ -47,6 +55,8 @@ namespace Recipies.Controllers
             this._recipeDislikesService = recipeDislikesService;
             this._productService = productService;
             this._recipeProductsService = recipeProductsService;
+            this._imageService = imageService;
+            this._webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
@@ -76,8 +86,7 @@ namespace Recipies.Controllers
                 {
                     Id = recipe.Id,
                     PreparationDescription = recipe.PreparationDescription,
-                    TimeToPrepare = recipe.TimeToPrepare,
-                    ImageUrl = recipe.ImageUrl,
+                    TimeToPrepare = recipe.TimeToPrepare,                    
                     CreatedBy = userName.Email,
                     NumberOfComments = recipe.NumberOfComments,
                     NumberOfLikes = numberOfLikes,
@@ -105,6 +114,8 @@ namespace Recipies.Controllers
         public async Task<ActionResult> Details(string id)
         {
             var recipe = await _recipeService.ReadAsync(Guid.Parse(id));
+            var images = await _imageService.FindAllAsync();
+            var imagesForRecipe = images.Where(x => x.RecipeId == Guid.Parse(recipe.Id)).ToList();
             var categories = await _categoryService.FindAllAsync();
             var categoryForRecipe = categories.FirstOrDefault(x => x.Id == recipe.CategoryId);
             var recipeLikes = await _likeService.FindAllAsync();
@@ -122,6 +133,11 @@ namespace Recipies.Controllers
                 });
             }
             var recipeViewModel = _mapper.Map<RecipeViewModel>(recipe);
+            recipeViewModel.ImagesFilePaths = new List<string>();
+            foreach (var image in imagesForRecipe)
+            {
+                recipeViewModel.ImagesFilePaths.Add(image.ImageName);
+            }
             recipeViewModel.Ingredients = recipeIngredientsList;
             recipeViewModel.NumberOfLikes = likesCount;
             recipeViewModel.Category = categoryForRecipe.Name;
@@ -154,8 +170,7 @@ namespace Recipies.Controllers
             var recipeViewModel = new RecipeViewModel
             {
                 Id = recipe.Id,
-                Categories = categoriesWithId,
-                ImageUrl = recipe.ImageUrl,
+                Categories = categoriesWithId,                
                 PreparationDescription = recipe.PreparationDescription,
                 TimeToPrepare = recipe.TimeToPrepare,
                 PortionsSize = recipe.PortionsSize
@@ -200,9 +215,9 @@ namespace Recipies.Controllers
             {
                 return View(model);
             }
-            model.CreatedOn = System.DateTime.UtcNow;
             var user = await this._userManager.GetUserAsync(HttpContext.User);
-            var userID = user.Id;
+            var userID = user.Id;                        
+            model.CreatedOn = DateTime.Now;            
             model.ApplicationUserId = userID;
             model.CategoryId = model.CategoryId;
             model.NumberOfComments = 0;
@@ -226,6 +241,31 @@ namespace Recipies.Controllers
             var recipeModelData = _mapper.Map<RecipeModel>(model);
              
             var recipeId = await _recipeService.CreateAsync(recipeModelData);
+            var wwwRootPath = _webHostEnvironment.WebRootPath;
+            foreach (var image in model.Images)
+            {
+                string fileName = Path.GetFileNameWithoutExtension(image.FileName + recipeId);
+                string extension = Path.GetExtension(image.FileName);
+
+                fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                string path = Path.Combine(wwwRootPath + "/Images/", fileName);
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    await image.CopyToAsync(fileStream);
+                }
+
+                var imageModel = new ImageModel
+                {
+                    CreatedOn = DateTime.Now,
+                    Extension = extension,
+                    RecipeId = recipeId,
+                    UserId = userID,
+                    FilePath = path,
+                    ImageName = fileName
+                };
+                await _imageService.CreateAsync(imageModel);
+
+            }
             var counter = 0;
             for (int i = counter; i < model.Ingredients.Count;)
             {

@@ -17,5 +17,9 @@ namespace Recipes.Domain.Models
         public string Extension { get; set; }
 
         public DateTime CreatedOn { get; set; }
+
+        public string FilePath { get; set; }
+
+        public string ImageName { get; set; }
     }
 }
