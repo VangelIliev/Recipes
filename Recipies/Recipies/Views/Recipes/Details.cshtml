@@ -6,7 +6,16 @@
             <h5 class="card-title">@Model.Name</h5>
             <p class="card-text">@Model.PreparationDescription</p>
         </div>
-        <ul class="list-group list-group-flush">
+        <ul class="list-group list-group-item">
+            <li class="list-group-item" style="background-color:cornflowerblue;color:white">Ingredients</li>
+            @foreach (var ingredient in Model.Ingredients)
+            {
+                <li class="list-group-item">@ingredient.IngredientName : @ingredient.Quantity</li>
+            }
+
+        </ul>
+        <ul class="list-group list-group-item">
+            <li class="list-group-item" style="background-color: cornflowerblue; color: white">Recipe info</li>           
             <li class="list-group-item">Size of portion : @Model.PortionsSize</li>
             <li class="list-group-item">Preparation time : @Model.TimeToPrepare minutes.</li>
             <li class="list-group-item">@Model.NumberOfLikes likes.</li>

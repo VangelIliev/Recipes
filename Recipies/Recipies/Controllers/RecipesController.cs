@@ -27,6 +27,7 @@ namespace Recipies.Controllers
         private readonly IRecipeDislikesService _recipeDislikesService;
         private readonly IProductService _productService;
         private readonly IRecipeProductsService _recipeProductsService;
+        
         public RecipesController(
             IMapper mapper,
             IRecipesService recipesService,
@@ -107,8 +108,21 @@ namespace Recipies.Controllers
             var categories = await _categoryService.FindAllAsync();
             var categoryForRecipe = categories.FirstOrDefault(x => x.Id == recipe.CategoryId);
             var recipeLikes = await _likeService.FindAllAsync();
-            var likesCount = recipeLikes.Where(x => x.RecipeId == Guid.Parse(id)).Count();            
+            var likesCount = recipeLikes.Where(x => x.RecipeId == Guid.Parse(id)).Count();
+            var recipeIngredients = await _recipeProductsService.FindAllAsync();
+            var recipeIngredientsForCurrentRecipe = recipeIngredients.Where(x => x.RecipeId == Guid.Parse(recipe.Id)).ToList();
+            var recipeIngredientsList = new List<RecipeIngredientInputModel>();
+            foreach (var recipeIngredient in recipeIngredientsForCurrentRecipe)
+            {
+                var ingredient = await _productService.ReadAsync(recipeIngredient.ProductId);
+                recipeIngredientsList.Add(new RecipeIngredientInputModel
+                {
+                    IngredientName = ingredient.Name,
+                    Quantity = recipeIngredient.Quantity
+                });
+            }
             var recipeViewModel = _mapper.Map<RecipeViewModel>(recipe);
+            recipeViewModel.Ingredients = recipeIngredientsList;
             recipeViewModel.NumberOfLikes = likesCount;
             recipeViewModel.Category = categoryForRecipe.Name;
             return View(recipeViewModel);
