@@ -249,7 +249,7 @@ namespace Recipies.Controllers
             return RedirectToAction("AllRoles");
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> DeleteRecipe(string id)
         {
             var recipe = await this._recipesService.ReadAsync(Guid.Parse(id));

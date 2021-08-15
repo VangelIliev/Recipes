@@ -7,11 +7,16 @@
 <div class="container mt-5">
     <div class="row offset-3">
         <div class="col-md-6">
-            <form asp-action="Add" asp-controller="Recipes" method="post">
+            <form asp-action="Add" enctype="multipart/form-data" asp-controller="Recipes" method="post">
                 <div class="form-group">
                     <label asp-for="Name" class="control-label"></label>
                     <input asp-for="Name" class="form-control" />
                     <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Images" class="control-label"></label>
+                    <input asp-for="Images" class="form-control" multiple/>
+                    <span asp-validation-for="Images" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="ImageUrl" class="control-label"></label>

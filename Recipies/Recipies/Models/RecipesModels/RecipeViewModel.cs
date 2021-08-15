@@ -1,4 +1,5 @@
-﻿using Recipies.Data.Models.Entities;
+﻿using Microsoft.AspNetCore.Http;
+using Recipies.Data.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,6 +14,8 @@ namespace Recipies.Models.RecipesModels
         public string Id { get; set; }
         [Required]
         public string ImageUrl { get; set; }
+
+        public List<IFormFile> Images { get; set; }
         [MaxLength(20)]
         public string Name { get; set; }
 

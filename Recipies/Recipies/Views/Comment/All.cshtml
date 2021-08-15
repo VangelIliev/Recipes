@@ -9,12 +9,12 @@
         <img src="@Model[0].ImageUrl" class="card-img-top" alt="...">
         <div class="card-body">
             <h5 class="card-title">@Model[0].RecipeName</h5>            
-            <p class="card-text"><small class="text-muted">Last updated 333 mins ago</small></p>
+            
         </div>
     </div>
     <div class="container">
-        <div class="row" id="rowToAppend">            
-            <div class="col-sm-5 col-md-6 col-12 pb-4">
+        <div class="row">            
+            <div class="col-sm-5 col-md-6 col-12 pb-4" id="rowToAppend">
                 <h1>Comments</h1>
                 @if (Model.Count > 1)
                 {
@@ -31,8 +31,7 @@
                 {
                     @for (int i = 0; i < Model.Count; i++)
                     {
-                        <div class="comment mt-4 text-justify">
-                            
+                        <div class="comment mt-4 text-justify">                            
                             <h4>@Model[i].SenderEmail</h4> <span>- @Model[i].CreatedOn</span> <br>
                             <p>@Model[i].Description</p>
                         </div>
@@ -77,8 +76,7 @@
                         var commentsHeader = document.getElementById('Comments');
                         $(commentsHeader).remove();
                         var rowToAppend = document.getElementById('rowToAppend');
-                        var htmlToAppend = `<div class="comment mt-4 text-justify">
-                        <img src="https://i.imgur.com/CFpa3nK.jpg"  alt="" class="rounded-circle" width="40" height="40">
+                        var htmlToAppend = `<div class="comment mt-4 text-justify">                        
                         <h4>${data.commentModel.senderEmail}</h4> <span>- ${data.commentModel.commentCreation}</span> <br>
                         <p>${data.commentModel.commentMessage}</p>
                         </div>`;

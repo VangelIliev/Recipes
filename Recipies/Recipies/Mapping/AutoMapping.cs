@@ -57,6 +57,9 @@ namespace Recipies.Mapping
 
             CreateMap<RecipeProducts, RecipeProductsModel>();
             CreateMap<RecipeProductsModel, RecipeProducts>();
+
+            CreateMap<ImageModel, Image>();
+            CreateMap<Image, ImageModel>();
         }
     }
 }
