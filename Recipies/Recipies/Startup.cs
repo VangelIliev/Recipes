@@ -86,7 +86,7 @@ namespace Recipies
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Errors/CustomError");
                 
                 app.UseHsts();
             }

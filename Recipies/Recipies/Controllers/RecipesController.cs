@@ -63,39 +63,49 @@ namespace Recipies.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> All()
         {
-            var recipesModels = await _recipeService.FindAllAsync();
-            var recipeViewModels = new List<RecipeViewModel>();
-            foreach (var model in recipesModels)
+            try
             {
-                var recipe = await _recipeService.ReadAsync(Guid.Parse(model.Id));
-                var userName = await _userManager.FindByIdAsync(recipe.ApplicationUserId);
-                //All likes
-                var allLlikesOfRecipes = await _likeService.FindAllAsync();
-                var currentRecipeLikes = allLlikesOfRecipes.Where(x => x.RecipeId == Guid.Parse(model.Id)).ToList();
-                var currentRecipeLikesCount = currentRecipeLikes.Count();
-
-                //All Dislikes
-                var allDisLlikesOfRecipes = await _recipeDislikesService.FindAllAsync();
-                var currentRecipeDisLikes = allDisLlikesOfRecipes.Where(x => x.RecipeId == Guid.Parse(model.Id)).ToList();
-                var currentRecipeDisLikesCount = currentRecipeDisLikes.Count();
-
-                var numberOfLikes = currentRecipeLikesCount - currentRecipeDisLikesCount;
-                var currentRecipeComments = await _commentService.FindAllAsync();
-                var currentRecipeCommentsCount = currentRecipeComments.Where(x => x.RecipeId == model.Id).ToList().Count();
-                var recipeViewModel = new RecipeViewModel
+                var recipesModels = await _recipeService.FindAllAsync();
+                var recipeViewModels = new List<RecipeViewModel>();
+                foreach (var model in recipesModels)
                 {
-                    Id = recipe.Id,
-                    PreparationDescription = recipe.PreparationDescription,
-                    TimeToPrepare = recipe.TimeToPrepare,                    
-                    CreatedBy = userName.Email,
-                    NumberOfComments = recipe.NumberOfComments,
-                    NumberOfLikes = numberOfLikes,
-                    Name = recipe.Name
-                };
-                var recipeModell = await PopulateRecipeViewModelImages(recipeViewModel, Guid.Parse(recipe.Id));
-                recipeViewModels.Add(recipeModell);
+                    var recipe = await _recipeService.ReadAsync(Guid.Parse(model.Id));
+                    var userName = await _userManager.FindByIdAsync(recipe.ApplicationUserId);
+                    //All likes
+                    var allLlikesOfRecipes = await _likeService.FindAllAsync();
+                    var currentRecipeLikes = allLlikesOfRecipes.Where(x => x.RecipeId == Guid.Parse(model.Id)).ToList();
+                    var currentRecipeLikesCount = currentRecipeLikes.Count();
+
+                    //All Dislikes
+                    var allDisLlikesOfRecipes = await _recipeDislikesService.FindAllAsync();
+                    var currentRecipeDisLikes = allDisLlikesOfRecipes.Where(x => x.RecipeId == Guid.Parse(model.Id)).ToList();
+                    var currentRecipeDisLikesCount = currentRecipeDisLikes.Count();
+
+                    var numberOfLikes = currentRecipeLikesCount - currentRecipeDisLikesCount;
+                    var currentRecipeComments = await _commentService.FindAllAsync();
+                    var currentRecipeCommentsCount = currentRecipeComments.Where(x => x.RecipeId == model.Id).ToList().Count();
+                    var recipeViewModel = new RecipeViewModel
+                    {
+                        Id = recipe.Id,
+                        PreparationDescription = recipe.PreparationDescription,
+                        TimeToPrepare = recipe.TimeToPrepare,
+                        CreatedBy = userName.Email,
+                        NumberOfComments = recipe.NumberOfComments,
+                        NumberOfLikes = numberOfLikes,
+                        Name = recipe.Name
+                    };
+                    var recipeModell = await PopulateRecipeViewModelImages(recipeViewModel, Guid.Parse(recipe.Id));
+                    recipeViewModels.Add(recipeModell);
+                    throw new ArgumentException();
+                }
+                return View(recipeViewModels);
             }
-            return View(recipeViewModels);
+            catch (Exception e)
+            {
+
+                return RedirectToAction("CustomError","Errors");
+            }
+            
         }
 
         [HttpGet]
@@ -148,8 +158,7 @@ namespace Recipies.Controllers
         [HttpGet]
         [Authorize]
         public async Task<ActionResult> RemoveRecipe(string id) 
-        {           
-            var recipe = await _recipeService.ReadAsync(Guid.Parse(id));
+        {                       
             var ricipeId = new Guid(id.ToUpper());
             await _recipeService.DeleteAsync(ricipeId);
             return this.RedirectToAction("All","Recipes");                                
@@ -159,26 +168,34 @@ namespace Recipies.Controllers
         [Authorize]
         public async Task<ActionResult> UpdateRecipe(string id)
         {
-            var categoriesModels = await _categoryService.FindAllAsync();
-
-            var categoriesWithId = new Dictionary<string, string>();
-
-            foreach (var category in categoriesModels.Distinct())
+            try
             {
-                categoriesWithId.Add(category.Id.ToString(), category.Name);
+                var categoriesModels = await _categoryService.FindAllAsync();
+
+                var categoriesWithId = new Dictionary<string, string>();
+
+                foreach (var category in categoriesModels.Distinct())
+                {
+                    categoriesWithId.Add(category.Id.ToString(), category.Name);
+                }
+
+                var recipe = await _recipeService.ReadAsync(Guid.Parse(id));
+                var recipeViewModel = new RecipeViewModel
+                {
+                    Id = recipe.Id,
+                    Categories = categoriesWithId,
+                    PreparationDescription = recipe.PreparationDescription,
+                    TimeToPrepare = recipe.TimeToPrepare,
+                    PortionsSize = recipe.PortionsSize
+                };
+                recipeViewModel.Categories = categoriesWithId;
+                return View("Update", recipeViewModel);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("CustomError", "Errors");
             }
             
-            var recipe = await _recipeService.ReadAsync(Guid.Parse(id));
-            var recipeViewModel = new RecipeViewModel
-            {
-                Id = recipe.Id,
-                Categories = categoriesWithId,                
-                PreparationDescription = recipe.PreparationDescription,
-                TimeToPrepare = recipe.TimeToPrepare,
-                PortionsSize = recipe.PortionsSize
-            };
-            recipeViewModel.Categories = categoriesWithId;
-            return View("Update", recipeViewModel);
         }
         [HttpGet]
         [Authorize]
@@ -203,93 +220,101 @@ namespace Recipies.Controllers
         [Authorize]
         public async Task<IActionResult> Add(RecipeViewModel model)
         {
-            var categoriesModels = await _categoryService.FindAllAsync();
+            try
+            {
+                var categoriesModels = await _categoryService.FindAllAsync();
 
-            var categoriesWithId = new Dictionary<string, string>();
-            
-            foreach (var category in categoriesModels.Distinct())
-            {
-                categoriesWithId.Add(category.Id.ToString(), category.Name);
+                var categoriesWithId = new Dictionary<string, string>();
 
-            }
-            model.Categories = categoriesWithId;
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var user = await this._userManager.GetUserAsync(HttpContext.User);
-            var userID = user.Id;                        
-            model.CreatedOn = DateTime.Now;            
-            model.ApplicationUserId = userID;
-            model.CategoryId = model.CategoryId;
-            model.NumberOfComments = 0;
-            model.NumberOfLikes = 0;
-            var productsIds = new List<Guid>();
-            foreach (var inputIngredient in model.Ingredients)
-            {
-                var ingredients = await this._productService.FindAllAsync();
-                var ingredient = ingredients.FirstOrDefault(x => x.Name == inputIngredient.IngredientName);
-                if (ingredient == null)
+                foreach (var category in categoriesModels.Distinct())
                 {
-                    ingredient = new ProductModel
+                    categoriesWithId.Add(category.Id.ToString(), category.Name);
+
+                }
+                model.Categories = categoriesWithId;
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                var user = await this._userManager.GetUserAsync(HttpContext.User);
+                var userID = user.Id;
+                model.CreatedOn = DateTime.Now;
+                model.ApplicationUserId = userID;
+                model.CategoryId = model.CategoryId;
+                model.NumberOfComments = 0;
+                model.NumberOfLikes = 0;
+                var productsIds = new List<Guid>();
+                foreach (var inputIngredient in model.Ingredients)
+                {
+                    var ingredients = await this._productService.FindAllAsync();
+                    var ingredient = ingredients.FirstOrDefault(x => x.Name == inputIngredient.IngredientName);
+                    if (ingredient == null)
                     {
-                        Name = inputIngredient.IngredientName,
-                    };
-                    var id = await this._productService.CreateAsync(ingredient);
-                    productsIds.Add(id);
+                        ingredient = new ProductModel
+                        {
+                            Name = inputIngredient.IngredientName,
+                        };
+                        var id = await this._productService.CreateAsync(ingredient);
+                        productsIds.Add(id);
+                    }
+                    productsIds.Add(ingredient.Id);
                 }
-                productsIds.Add(ingredient.Id);
-            }
-            var recipeModelData = _mapper.Map<RecipeModel>(model);
-             
-            var recipeId = await _recipeService.CreateAsync(recipeModelData);
-            var wwwRootPath = _webHostEnvironment.WebRootPath;
-            foreach (var image in model.Images)
-            {
-                string fileName = Path.GetFileNameWithoutExtension(image.FileName + recipeId);
-                string extension = Path.GetExtension(image.FileName);
+                var recipeModelData = _mapper.Map<RecipeModel>(model);
 
-                fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
-                string path = Path.Combine(wwwRootPath + "/Images/", fileName);
-                using (var fileStream = new FileStream(path, FileMode.Create))
+                var recipeId = await _recipeService.CreateAsync(recipeModelData);
+                var wwwRootPath = _webHostEnvironment.WebRootPath;
+                foreach (var image in model.Images)
                 {
-                    await image.CopyToAsync(fileStream);
-                }
+                    string fileName = Path.GetFileNameWithoutExtension(image.FileName + recipeId);
+                    string extension = Path.GetExtension(image.FileName);
 
-                var imageModel = new ImageModel
-                {
-                    CreatedOn = DateTime.Now,
-                    Extension = extension,
-                    RecipeId = recipeId,
-                    UserId = userID,
-                    FilePath = path,
-                    ImageName = fileName
-                };
-                await _imageService.CreateAsync(imageModel);
-
-            }
-            var counter = 0;
-            for (int i = counter; i < model.Ingredients.Count;)
-            {
-                if (counter == model.Ingredients.Count)
-                {
-                    break;
-                }
-                foreach (var product in productsIds)
-                {
-                    var recipeProduct = new RecipeProductsModel
+                    fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                    string path = Path.Combine(wwwRootPath + "/Images/", fileName);
+                    using (var fileStream = new FileStream(path, FileMode.Create))
                     {
+                        await image.CopyToAsync(fileStream);
+                    }
+
+                    var imageModel = new ImageModel
+                    {
+                        CreatedOn = DateTime.Now,
+                        Extension = extension,
                         RecipeId = recipeId,
-                        ProductId = product,
-                        Quantity = model.Ingredients[counter].Quantity
+                        UserId = userID,
+                        FilePath = path,
+                        ImageName = fileName
                     };
-                    await this._recipeProductsService.CreateAsync(recipeProduct);
-                    counter++;
-                    break;
-                    
+                    await _imageService.CreateAsync(imageModel);
+
                 }
-            }                                     
-            return RedirectToAction("All");
+                var counter = 0;
+                for (int i = counter; i < model.Ingredients.Count;)
+                {
+                    if (counter == model.Ingredients.Count)
+                    {
+                        break;
+                    }
+                    foreach (var product in productsIds)
+                    {
+                        var recipeProduct = new RecipeProductsModel
+                        {
+                            RecipeId = recipeId,
+                            ProductId = product,
+                            Quantity = model.Ingredients[counter].Quantity
+                        };
+                        await this._recipeProductsService.CreateAsync(recipeProduct);
+                        counter++;
+                        break;
+
+                    }
+                }
+                return RedirectToAction("All");
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("CustomError", "Errors");
+            }
+            
         }
 
         private async Task<RecipeViewModel> PopulateRecipeViewModelImages(RecipeViewModel model, Guid recipeId)
