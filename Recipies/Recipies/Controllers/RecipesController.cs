@@ -92,7 +92,8 @@ namespace Recipies.Controllers
                     NumberOfLikes = numberOfLikes,
                     Name = recipe.Name
                 };
-                recipeViewModels.Add(recipeViewModel);
+                var recipeModell = await PopulateRecipeViewModelImages(recipeViewModel, Guid.Parse(recipe.Id));
+                recipeViewModels.Add(recipeModell);
             }
             return View(recipeViewModels);
         }
@@ -107,15 +108,19 @@ namespace Recipies.Controllers
             var recipesOfUser = recipes.Where(x => x.ApplicationUserId == userID).ToList();
 
             var recipeViewModels = _mapper.Map<List<RecipeViewModel>>(recipesOfUser);
-            return View(recipeViewModels);
+            var recipeViewModelsList = new List<RecipeViewModel>();
+            foreach (var model in recipeViewModels)
+            {
+                var recipeModel = await PopulateRecipeViewModelImages(model, Guid.Parse(model.Id));
+                recipeViewModelsList.Add(recipeModel);
+            }
+            return View(recipeViewModelsList);
         }
         [HttpGet]
         [Authorize]
         public async Task<ActionResult> Details(string id)
         {
-            var recipe = await _recipeService.ReadAsync(Guid.Parse(id));
-            var images = await _imageService.FindAllAsync();
-            var imagesForRecipe = images.Where(x => x.RecipeId == Guid.Parse(recipe.Id)).ToList();
+            var recipe = await _recipeService.ReadAsync(Guid.Parse(id));           
             var categories = await _categoryService.FindAllAsync();
             var categoryForRecipe = categories.FirstOrDefault(x => x.Id == recipe.CategoryId);
             var recipeLikes = await _likeService.FindAllAsync();
@@ -133,15 +138,12 @@ namespace Recipies.Controllers
                 });
             }
             var recipeViewModel = _mapper.Map<RecipeViewModel>(recipe);
-            recipeViewModel.ImagesFilePaths = new List<string>();
-            foreach (var image in imagesForRecipe)
-            {
-                recipeViewModel.ImagesFilePaths.Add(image.ImageName);
-            }
-            recipeViewModel.Ingredients = recipeIngredientsList;
-            recipeViewModel.NumberOfLikes = likesCount;
-            recipeViewModel.Category = categoryForRecipe.Name;
-            return View(recipeViewModel);
+
+            var recipeModel = await PopulateRecipeViewModelImages(recipeViewModel, Guid.Parse(recipe.Id));
+            recipeModel.Ingredients = recipeIngredientsList;
+            recipeModel.NumberOfLikes = likesCount;
+            recipeModel.Category = categoryForRecipe.Name;
+            return View(recipeModel);
         }
         [HttpGet]
         [Authorize]
@@ -288,6 +290,19 @@ namespace Recipies.Controllers
                 }
             }                                     
             return RedirectToAction("All");
+        }
+
+        private async Task<RecipeViewModel> PopulateRecipeViewModelImages(RecipeViewModel model, Guid recipeId)
+        {
+            var images = await _imageService.FindAllAsync();
+            var imagesForRecipe = images.Where(x => x.RecipeId == recipeId).ToList();
+            model.ImagesFilePaths = new List<string>();
+            foreach (var image in imagesForRecipe)
+            {
+                model.ImagesFilePaths.Add(image.ImageName);
+            }
+
+            return model;
         }
     }
 }
