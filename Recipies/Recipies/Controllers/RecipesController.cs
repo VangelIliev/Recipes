@@ -96,7 +96,7 @@ namespace Recipies.Controllers
                     };
                     var recipeModell = await PopulateRecipeViewModelImages(recipeViewModel, Guid.Parse(recipe.Id));
                     recipeViewModels.Add(recipeModell);
-                    throw new ArgumentException();
+                    
                 }
                 return View(recipeViewModels);
             }
