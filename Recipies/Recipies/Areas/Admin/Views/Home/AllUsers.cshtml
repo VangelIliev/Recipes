@@ -1,0 +1,73 @@
+﻿@model IList<UserDetailsViewModel>
+<div class="header mt-md-5">
+    <div class="header-body">
+        <div class="row align-items-center">
+            <div class="col">
+                <h6 class="header-pretitle">
+                    Users
+                </h6>
+                <h1 class="header-title">
+                    List of users
+                </h1>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Update</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr class="table-light">
+                        <td>@user.Email</td>
+                        @if (user.Role != null)
+                        {
+                            <td>@user.Role</td>
+                        }
+                        else
+                        {
+                            <td>
+                                <div class="text-danger">Missing role</div>
+                            </td>
+                        }
+                        <td>
+                            <a asp-controller="Admin"
+                               asp-action="EditUser"
+                               asp-route-userId="@user.Id"
+                               class="btn btn-secondary btn-rounded">Update</a>
+                            <a asp-controller="Admin"
+                               asp-action="DetailsUser"
+                               asp-route-userId="@user.Id"
+                               class="btn btn-primary btn-rounded">Details</a>
+                            @if (user.Role != "Administrator")
+                            {
+                                @Html.ActionLink("Delete", "DeleteRole", new { id = user.Id }, new
+                                {
+                                    @class = "btn btn-danger",
+                                    onclick = "return confirm('Are you sure you want to delete this user ? );"
+                                })
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <a class="btn btn-primary btn-block" asp-action="CreateUser">Add new User</a>
+
+        @if (TempData["success-message"] != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @TempData["success-message"]
+            </div>
+        }
+
+    </div>
+</div>

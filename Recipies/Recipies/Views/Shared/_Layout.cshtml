@@ -36,10 +36,10 @@
                     @if (this.User.IsInRole("Administrator"))
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Category" asp-action="AddCategory">Add category</a>
+                            <a class="nav-link" asp-area="Admin" asp-controller="Category" asp-action="AddCategory">Add category</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Category" asp-action="RemoveCategory">Remove category</a>
+                            <a class="nav-link" asp-area="Admin" asp-controller="Category" asp-action="RemoveCategory">Remove category</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -47,17 +47,17 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <div class="dropdown-divider">Users</div>
-                                <a asp-controller="Admin" asp-action="AllUsers" class="dropdown-item">
+                                <a asp-area="Admin" asp-controller="Home" asp-action="AllUsers" class="dropdown-item">
                                     All users
                                 </a>
-                                <a asp-controller="Admin" asp-action="CreateUser" class="dropdown-item">
+                                <a asp-area="Admin" asp-controller="Home" asp-action="CreateUser" class="dropdown-item">
                                     Create user
                                 </a>
                                 <div class="dropdown-divider">Роли</div>
-                                <a asp-controller="Admin" asp-action="AllRoles" class="dropdown-item">
+                                <a asp-area="Admin" asp-controller="Home" asp-action="AllRoles" class="dropdown-item">
                                     All roles
                                 </a>
-                                <a asp-controller="Admin" asp-action="CreateRole" class="dropdown-item">
+                                <a asp-area="Admin" asp-controller="Home" asp-action="CreateRole" class="dropdown-item">
                                     Create role
                                 </a>
                             </div>

@@ -101,6 +101,10 @@ namespace Recipies
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "MyArea", 
+                    pattern: "{admin}/{controller=Home}/{action=LogIn}/{id?}"
+                    );
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Recipes}/{action=All}/{id?}");
                 endpoints.MapRazorPages();

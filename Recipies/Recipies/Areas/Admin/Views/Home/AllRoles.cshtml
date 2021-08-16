@@ -1,0 +1,64 @@
+﻿@model IList<Microsoft.AspNetCore.Identity.IdentityRole>
+<div class="header mt-md-5">
+    <div class="header-body">
+        <div class="row align-items-center">
+            <div class="col">
+                <h6 class="header-pretitle">
+                    Roles
+                </h6>
+                <h1 class="header-title">
+                    List of roles
+                </h1>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th class="nosort">Role</th>
+                    <th>Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var role in Model)
+                {
+                    <tr class="table-light">
+                        <td>@role.Name</td>
+                        <td>
+                            <a asp-controller="Admin"
+                               asp-action="EditRole"
+                               asp-route-roleId="@role.Id"
+                               class="btn btn-secondary btn-rounded">Update</a>
+                            <a asp-controller="Admin"
+                               asp-action="DetailsRole"
+                               asp-route-roleId="@role.Id"
+                               class="btn btn-primary btn-rounded">Details</a>
+
+                            @if (role.Name != "Administrator")
+                            {
+                                @Html.ActionLink("Delete", "DeleteRole",
+                                    new { id = role.Id }, new
+                                         {
+                                             @class = "btn btn-danger",
+                                    onclick = "return confirm('Are you sure you want to delete this role?');"
+                                         })
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <a class="btn btn-primary btn-block" asp-action="CreateRole">Добавяне на нова роля</a>
+
+        @if (TempData["success-message"] != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @TempData["success-message"]
+            </div>
+        }
+
+    </div>
+</div>

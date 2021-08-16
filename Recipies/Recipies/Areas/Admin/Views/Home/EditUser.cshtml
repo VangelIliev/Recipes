@@ -1,0 +1,52 @@
+﻿@model EditUserViewModel
+<div class="header mt-md-5">
+    <div class="header-body">
+        <div class="row align-items-center">
+            <div class="col">
+                <h6 class="header-pretitle">
+                    Users
+                </h6>
+                <h1 class="header-title">
+                    Change user - <span class="focus-item">@Model.Email</span>
+                </h1>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <form class="forms-sample" asp-action="EditUser" asp-controller="Admin">
+            <input asp-for="@Model.Id" value="@Model.Id" type="hidden" />
+            <input asp-for="@Model.Role" value="@Model.Role" type="hidden" />
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="@Model.Role">Current role</label>
+                    <input asp-for="@Model.Role" type="text" class="form-control" disabled>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label asp-for="@Model.NewRole">New role</label>
+                    @if (ViewBag.Roles != null)
+                    {
+                        <select asp-for="@Model.NewRole" asp-items="@(new SelectList(ViewBag.Roles,"Name","Name"))" class="form-control"></select>
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <div class="sign-btn text-center">
+                        <input type="submit" class="btn btn-primary btn-block" value="Add new user">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <div class="sign-btn text-center">
+                        <a asp-controller="Admin" asp-action="AllUsers" class="btn btn-secondary btn-block">Back</a>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
