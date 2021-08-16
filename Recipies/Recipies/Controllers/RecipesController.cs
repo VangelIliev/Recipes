@@ -183,12 +183,28 @@ namespace Recipies.Controllers
                 var recipeViewModel = new RecipeViewModel
                 {
                     Id = recipe.Id,
+                    Name = recipe.Name,
                     Categories = categoriesWithId,
                     PreparationDescription = recipe.PreparationDescription,
                     TimeToPrepare = recipe.TimeToPrepare,
-                    PortionsSize = recipe.PortionsSize
+                    PortionsSize = recipe.PortionsSize,
+                    CategoryId = recipe.CategoryId.ToString()
                 };
                 recipeViewModel.Categories = categoriesWithId;
+                var recipeIngredients = await _recipeProductsService.FindAllAsync();
+                var recipeIngredientsForCurrentRecipe = recipeIngredients.Where(x => x.RecipeId == Guid.Parse(recipe.Id)).ToList();
+                var recipeIngredientsList = new List<RecipeIngredientInputModel>();
+                foreach (var recipeIngredient in recipeIngredientsForCurrentRecipe)
+                {
+                    var ingredient = await _productService.ReadAsync(recipeIngredient.ProductId);
+                    recipeIngredientsList.Add(new RecipeIngredientInputModel
+                    {
+                        IngredientName = ingredient.Name,
+                        Quantity = recipeIngredient.Quantity
+                    });
+                }
+                var recipeModel = await PopulateRecipeViewModelImages(recipeViewModel, Guid.Parse(recipe.Id));
+                recipeModel.Ingredients = recipeIngredientsList;
                 return View("Update", recipeViewModel);
             }
             catch (Exception)
