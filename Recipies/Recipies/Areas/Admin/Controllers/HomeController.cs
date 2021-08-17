@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Recipes.Domain.Contracts;
@@ -26,6 +27,7 @@ namespace Recipies.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILikeService _likeService;
         private readonly IRecipesService _recipesService;
+        private readonly IEmailSender _emailSender;
         public HomeController(
                 ICategoryService categoryService,
                 IMapper mapper,
@@ -34,8 +36,8 @@ namespace Recipies.Controllers
                 SignInManager<IdentityUser> signInManager,
                 UserManager<IdentityUser> userManager,
                 ILikeService likeService,
-                IRecipesService recipesService
-                )
+                IRecipesService recipesService, 
+                IEmailSender emailSender)
         {
             this._categoryService = categoryService;
             this._mapper = mapper;
@@ -45,6 +47,7 @@ namespace Recipies.Controllers
             this._userManager = userManager;
             this._likeService = likeService;
             this._recipesService = recipesService;
+            _emailSender = emailSender;
         }
 
         [HttpGet]
@@ -94,6 +97,7 @@ namespace Recipies.Controllers
 
                 if (result.Succeeded)
                 {
+                    await _emailSender.SendEmailAsync(model.Email,"Successfull registration", $"Hello {model.Email}, my name is Vangel and I am the owner of the website and I am glad that you registered. I wish you a pleasant time on the site");
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("All", "Recipes");
                 }

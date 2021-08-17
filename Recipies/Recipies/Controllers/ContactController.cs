@@ -7,11 +7,19 @@ using MimeKit.Text;
 using Recipies.Models.EmailModels;
 using System.Threading.Tasks;
 using System;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Recipies.Controllers
 {
     public class ContactController : Controller
     {
+        private IEmailSender _emailSender;
+
+        public ContactController(IEmailSender emailSender)
+        {
+            _emailSender = emailSender;
+        }
+
         public async Task<ActionResult> Index()
         {
             return View();
@@ -25,25 +33,14 @@ namespace Recipies.Controllers
             }
             try
             {
-                var email = new MimeMessage();
-                email.From.Add(MailboxAddress.Parse(model.Email));
-                email.To.Add(MailboxAddress.Parse("recipes.vangel@gmail.com"));
-                email.Subject = model.Subject;
-                email.Body = new TextPart(TextFormat.Plain) { Text = model.Message };
 
-                // send email
-                using var smtp = new SmtpClient();
-                smtp.Connect("smtp.gmail.com", 587);
-                smtp.Authenticate("recipes.vangel@gmail.com", "parolatamiemnogodobra");
-                smtp.Send(email);
-                smtp.Disconnect(true);
+                await _emailSender.SendEmailAsync(model.Email, model.Subject, model.Message);
 
                 ViewBag.message = "The mail has been sent we will call you back as soon as possible!";
             }
             catch (Exception e)
             {
-
-                throw;
+                return RedirectToAction("CustomError", "Errors");
             }                        
            return View();
         }
