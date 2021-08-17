@@ -9,5 +9,6 @@ namespace Recipes.Domain.Contracts
 {
     public interface IImageService : IServiceBase<ImageModel>
     {
+        public Task<List<string>> PopulateRecipeViewModelImages(Guid recipeId);
     }
 }

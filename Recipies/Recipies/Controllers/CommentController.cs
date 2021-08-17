@@ -76,8 +76,8 @@ namespace Recipies.Controllers
             }
             var recipeViewModel = _mapper.Map<RecipeViewModel>(recipe);
 
-            var recipeModel = await PopulateRecipeViewModelImages(recipeViewModel, Guid.Parse(recipe.Id));
-            recipeCommentsViewModel[0].ImagesFilePaths = recipeModel.ImagesFilePaths;
+            var imagesPaths = await _imageService.PopulateRecipeViewModelImages(Guid.Parse(recipe.Id));
+            recipeCommentsViewModel[0].ImagesFilePaths = imagesPaths;
             return View(recipeCommentsViewModel);
         }
 
@@ -118,18 +118,6 @@ namespace Recipies.Controllers
             model.CommentCreation = DateTime.Now.ToShortDateString();
             return Json(new { success = true, message = "You have added successfully a comment",commentModel = model });
         }
-
-        private async Task<RecipeViewModel> PopulateRecipeViewModelImages(RecipeViewModel model, Guid recipeId)
-        {
-            var images = await _imageService.FindAllAsync();
-            var imagesForRecipe = images.Where(x => x.RecipeId == recipeId).ToList();
-            model.ImagesFilePaths = new List<string>();
-            foreach (var image in imagesForRecipe)
-            {
-                model.ImagesFilePaths.Add(image.ImageName);
-            }
-
-            return model;
-        }
+       
     }
 }

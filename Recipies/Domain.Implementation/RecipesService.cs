@@ -15,6 +15,7 @@ namespace Recipes.Domain.Implementation
     public class RecipesService : ServiceBase, IRecipesService
     {
         private readonly IRecipesRepository _recipesRepository;
+        
         public RecipesService(IRecipesRepository recipeRepository, IMapper automapper) : base(automapper)
         {
             this._recipesRepository = recipeRepository;
@@ -62,6 +63,6 @@ namespace Recipes.Domain.Implementation
         {
             var dbEntity = this._autoMapper.Map<Recipe>(entity);
             await this._recipesRepository.UpdateAsync(dbEntity);
-        }
+        }       
     }
 }

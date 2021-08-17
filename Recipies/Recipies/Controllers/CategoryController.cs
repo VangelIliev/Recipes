@@ -74,8 +74,9 @@ namespace Recipies.Controllers
                     NumberOfLikes = numberOfLikes,
                     Name = recipe.Name
                 };
-                var recipeModell = await PopulateRecipeViewModelImages(recipeViewModel, Guid.Parse(recipe.Id));
-                recipeViewModels.Add(recipeModell);
+                var imagesPaths = await _imageService.PopulateRecipeViewModelImages(Guid.Parse(recipe.Id));
+                recipeViewModel.ImagesFilePaths = imagesPaths;
+                recipeViewModels.Add(recipeViewModel);
             }
             return View(recipeViewModels);
 
@@ -119,19 +120,6 @@ namespace Recipies.Controllers
             var category = await _categoryService.ReadAsync(Guid.Parse(model.Id));
             await _categoryService.DeleteAsync(category);
             return RedirectToAction("All","Recipes");
-        }
-
-        private async Task<RecipeViewModel> PopulateRecipeViewModelImages(RecipeViewModel model, Guid recipeId)
-        {
-            var images = await _imageService.FindAllAsync();
-            var imagesForRecipe = images.Where(x => x.RecipeId == recipeId).ToList();
-            model.ImagesFilePaths = new List<string>();
-            foreach (var image in imagesForRecipe)
-            {
-                model.ImagesFilePaths.Add(image.ImageName);
-            }
-
-            return model;
         }
     }
 }

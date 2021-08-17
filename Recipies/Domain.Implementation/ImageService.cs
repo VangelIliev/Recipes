@@ -56,5 +56,18 @@ namespace Recipes.Domain.Implementation
             var dbEntity = this._autoMapper.Map<Image>(entity);
             await this._imageRepository.UpdateAsync(dbEntity);
         }
+
+        public async Task<List<string>> PopulateRecipeViewModelImages(Guid recipeId)
+        {
+            var images = await FindAllAsync();
+            var imagesForRecipe = images.Where(x => x.RecipeId == recipeId).ToList();
+            var imagePaths = new List<string>();
+            foreach (var image in imagesForRecipe)
+            {
+                imagePaths.Add(image.ImageName);
+            }
+
+            return imagePaths;
+        }
     }
 }
