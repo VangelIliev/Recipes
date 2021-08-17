@@ -64,8 +64,7 @@ namespace Recipies.Controllers
             }
             catch (Exception e)
             {
-
-                throw;
+                return RedirectToAction("CustomError", "Errors");
             }
             
         }
@@ -105,8 +104,7 @@ namespace Recipies.Controllers
             }
             catch (Exception e)
             {
-
-                throw;
+                return RedirectToAction("CustomError", "Errors");                
             }
             
         }

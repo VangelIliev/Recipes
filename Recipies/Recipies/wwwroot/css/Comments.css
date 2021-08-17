@@ -71,7 +71,7 @@ body {
 
 .comment {
     border: 1px solid rgba(16, 46, 46, 1);
-    background-color: rgba(16, 46, 46, 0.973);
+    background-color: rgba(3, 86, 252 );
     float: left;
     border-radius: 5px;
     padding-left: 40px;
@@ -90,7 +90,7 @@ body {
     .comment span,
     .darker p,
     .darker span {
-        color: rgb(184, 183, 183)
+        color: white
     }
 
 h1,
@@ -127,9 +127,9 @@ label {
     border-radius: 12px
 }
 
-form {
+#algin-form {
     border: 1px solid rgba(16, 46, 46, 1);
-    background-color: rgba(16, 46, 46, 0.973);
+    background-color: rgba(3, 86, 252 );
     border-radius: 5px;
     padding: 20px
 }

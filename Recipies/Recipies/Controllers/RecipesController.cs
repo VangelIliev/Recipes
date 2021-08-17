@@ -326,7 +326,7 @@ namespace Recipies.Controllers
                 }
                 return RedirectToAction("All");
             }
-            catch (Exception)
+            catch (Exception е)
             {
                 return RedirectToAction("CustomError", "Errors");
             }

@@ -6,6 +6,7 @@ using Recipes.Domain.Contracts;
 using Recipes.Domain.Models;
 using Recipies.Models.AdminModels;
 using Recipies.Models.CommentModels;
+using Recipies.Models.RecipesModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,19 +22,21 @@ namespace Recipies.Controllers
         private readonly IAdminService _adminService;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ICommentService _commentService;
-
+        private readonly IImageService _imageService;
         public CommentController(
             IRecipesService recipesService,
             IMapper mapper,
             IAdminService adminService,
-            UserManager<IdentityUser> userManager, 
-            ICommentService commentService)
+            UserManager<IdentityUser> userManager,
+            ICommentService commentService, 
+            IImageService imageService)
         {
             this._recipesService = recipesService;
             this._mapper = mapper;
             this._adminService = adminService;
             this._userManager = userManager;
             this._commentService = commentService;
+            this._imageService = imageService;
         }
 
         [HttpGet]
@@ -71,6 +74,10 @@ namespace Recipies.Controllers
                     ImageUrl = recipe.ImageUrl
                 });
             }
+            var recipeViewModel = _mapper.Map<RecipeViewModel>(recipe);
+
+            var recipeModel = await PopulateRecipeViewModelImages(recipeViewModel, Guid.Parse(recipe.Id));
+            recipeCommentsViewModel[0].ImagesFilePaths = recipeModel.ImagesFilePaths;
             return View(recipeCommentsViewModel);
         }
 
@@ -110,6 +117,19 @@ namespace Recipies.Controllers
             await this._commentService.CreateAsync(comment);
             model.CommentCreation = DateTime.Now.ToShortDateString();
             return Json(new { success = true, message = "You have added successfully a comment",commentModel = model });
+        }
+
+        private async Task<RecipeViewModel> PopulateRecipeViewModelImages(RecipeViewModel model, Guid recipeId)
+        {
+            var images = await _imageService.FindAllAsync();
+            var imagesForRecipe = images.Where(x => x.RecipeId == recipeId).ToList();
+            model.ImagesFilePaths = new List<string>();
+            foreach (var image in imagesForRecipe)
+            {
+                model.ImagesFilePaths.Add(image.ImageName);
+            }
+
+            return model;
         }
     }
 }

@@ -192,7 +192,7 @@ namespace Recipies.Controllers
             return RedirectToAction("AllUsers");
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> DeleteUser(UserDetailsViewModel model)
         {
             var deleteResult = await this._adminService.DeleteUserAsync(model.Id);

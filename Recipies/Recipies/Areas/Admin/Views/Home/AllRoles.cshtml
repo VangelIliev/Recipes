@@ -28,11 +28,13 @@
                     <tr class="table-light">
                         <td>@role.Name</td>
                         <td>
-                            <a asp-controller="Admin"
+                            <a asp-area="Admin"
+                               asp-controller="Home"
                                asp-action="EditRole"
                                asp-route-roleId="@role.Id"
                                class="btn btn-secondary btn-rounded">Update</a>
-                            <a asp-controller="Admin"
+                            <a asp-area="Admin"
+                               asp-controller="Home"
                                asp-action="DetailsRole"
                                asp-route-roleId="@role.Id"
                                class="btn btn-primary btn-rounded">Details</a>

@@ -8,6 +8,7 @@ using Recipies.Models.EmailModels;
 using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Recipies.Controllers
 {
@@ -25,6 +26,7 @@ namespace Recipies.Controllers
             return View();
         }
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> Index(EmailInputFormModel model)
         {
             if (!ModelState.IsValid)
@@ -33,10 +35,8 @@ namespace Recipies.Controllers
             }
             try
             {
-
                 await _emailSender.SendEmailAsync(model.Email, model.Subject, model.Message);
-
-                ViewBag.message = "The mail has been sent we will call you back as soon as possible!";
+                return RedirectToAction("All", "Recipes");
             }
             catch (Exception e)
             {

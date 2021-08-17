@@ -3,7 +3,7 @@
     <div class="row">
         @foreach (var recipe in Model)
         {
-        <div class="card col-md-4" style="width: 18rem;text-align:left">
+        <div class="card col-md-4 mt-3 " style="width: 18rem;text-align:left">
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
 
                 <ol class="carousel-indicators">
@@ -74,7 +74,7 @@
                 {
                     if (this.User.IsInRole("Administrator"))
                     {
-                        <a asp-controller="Admin" asp-action="DeleteRecipe" class="btn btn-danger" asp-route-id="@recipe.Id" style="text-align:center">Delete Recipe</a>
+                        <a asp-area="Admin" asp-controller="Home" asp-action="DeleteRecipe" class="btn btn-danger" asp-route-id="@recipe.Id" style="text-align:center">Delete Recipe</a>
                         <a asp-controller="Recipes" asp-action="Details" class="btn btn-primary" asp-route-id="@recipe.Id" style="text-align:center">Details</a>
                     }
                     else

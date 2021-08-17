@@ -22,5 +22,7 @@ namespace Recipies.Models.CommentModels
         public string SenderEmail { get; set; }
 
         public string CreatedOn { get; set; }
+
+        public List<string> ImagesFilePaths { get; set; }
     }
 }
