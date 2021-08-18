@@ -16,6 +16,7 @@ using Recipes.Domain.Contracts;
 using Recipes.Domain.Implementation;
 using Recipies.Data;
 using Recipies.Data.Models.DbContext;
+using Recipies.Hubs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,7 +53,8 @@ namespace Recipies
             services.AddSession();
             services.AddControllersWithViews();
             services.AddAutoMapper(typeof(Mapping.AutoMapping));
-            services.AddAntiforgery();            
+            services.AddAntiforgery();
+            services.AddSignalR();
 
             // REPOSITORIES
             services.AddTransient<ICategoriesRepository, CategoriesRepository>();
@@ -118,6 +120,7 @@ namespace Recipies
                     name: "default",
                     pattern: "{controller=Recipes}/{action=All}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapHub<CommentHub>("/commentHub");
             });
         }
     }

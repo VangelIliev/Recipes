@@ -12,11 +12,11 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand"  asp-controller="Recipes" asp-action="All">Recipes</a>
+            <a class="navbar-brand" asp-controller="Recipes" asp-action="All">Recipes</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
+
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
@@ -31,9 +31,13 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Recipes" asp-action="Own">My Recipes</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Contact" asp-action="ContactHost">Contact Us</a>
-                        </li>
+                        @if (!this.User.IsInRole("Administrator"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Contact" asp-action="ContactHost">Contact Us</a>
+                            </li>
+                        }
+
 
                     }
                     @if (this.User.IsInRole("Administrator"))
@@ -70,11 +74,11 @@
                         </li>
                     }
 
-                </ul>               
+                </ul>
                 <partial name="_LoginPartial" />
             </div>
         </nav>
-        
+
     </header>
     <div class="container">
         <main role="main" class="pb-3">
@@ -91,5 +95,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/js/microsoft/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/chat.js"></script>
 </body>
 </html>
