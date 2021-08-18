@@ -115,7 +115,7 @@ namespace Recipies.Controllers
             recipe.NumberOfComments++;
             await this._recipesService.UpdateAsync(recipe);
             await this._commentService.CreateAsync(comment);
-            model.CommentCreation = DateTime.Now.ToShortDateString();
+            model.CommentCreation = DateTime.Now.ToShortDateString();            
             return Json(new { success = true, message = "You have added successfully a comment",commentModel = model });
         }
        

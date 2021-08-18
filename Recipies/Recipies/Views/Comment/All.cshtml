@@ -126,7 +126,8 @@
                         <h4>${data.commentModel.senderEmail}</h4> <span>Created on : ${data.commentModel.commentCreation}</span> <br>
                         <p>${data.commentModel.commentMessage}</p>
                         </div>`;
-                        $(rowToAppend).append(htmlToAppend);                        
+                        $(rowToAppend).append(htmlToAppend);
+                        alert("Successfully added comment");
                     } else {
                         window.alert(data.message);
                     };

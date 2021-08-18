@@ -164,6 +164,7 @@ namespace Recipies.Controllers
         {                       
             var ricipeId = new Guid(id.ToUpper());
             await _recipeService.DeleteAsync(ricipeId);
+            this.TempData["Message"] = "Successfully removed recipe !";
             return this.RedirectToAction("All","Recipes");                                
         }
 
@@ -224,9 +225,18 @@ namespace Recipies.Controllers
         {
             try
             {
+                var categoriesModels = await _categoryService.FindAllAsync();
+
+                var categoriesWithId = new Dictionary<string, string>();
+
+                foreach (var category in categoriesModels.Distinct())
+                {
+                    categoriesWithId.Add(category.Id.ToString(), category.Name);
+                }
+                model.Categories = categoriesWithId;
                 if (!ModelState.IsValid)
                 {
-                    return View(model);
+                    return View("Update",model);
                 }
 
                 var user = await this._userManager.GetUserAsync(HttpContext.User);
@@ -260,28 +270,38 @@ namespace Recipies.Controllers
                         var id = await this._productService.CreateAsync(ingredient);
                         productsIds.Add(id);
                     }
-                    productsIds.Add(ingredient.Id);
+                    if(ingredient.Id != Guid.Empty)
+                    {                        
+                        productsIds.Add(ingredient.Id);
+                    }
+                    
                 }
                 var counter = 0;
-                for (int i = counter; i < model.Ingredients.Count;)
+                foreach (var item in productsIds)
                 {
-                    if (counter == model.Ingredients.Count)
+                    var recipeProductsDb = await _recipeProductsService.FindAllAsync();
+                    var recipeProduct = recipeProductsDb.FirstOrDefault(x => x.ProductId == item);
+                    if (recipeProduct != null)
+                    {
+                        await _recipeProductsService.DeleteAsync(recipeProduct);
+                    }
+                    
+                }
+                for (int j = 0; j < productsIds.Count;)
+                {
+                    if (counter == productsIds.Count)
                     {
                         break;
                     }
-                    foreach (var product in productsIds)
+                    var recipeProduct = new RecipeProductsModel
                     {
-                        var recipeProduct = new RecipeProductsModel
-                        {
-                            RecipeId = Guid.Parse(recipeId),
-                            ProductId = product,
-                            Quantity = model.Ingredients[counter].Quantity
-                        };
-                        await this._recipeProductsService.CreateAsync(recipeProduct);
-                        counter++;
-                        break;
-
-                    }
+                        RecipeId = Guid.Parse(recipeId),
+                        ProductId = productsIds[counter],
+                        Quantity = model.Ingredients[counter].Quantity
+                    };
+                    await this._recipeProductsService.CreateAsync(recipeProduct);
+                    counter++;
+                    
                 }
 
                 //Update Images
@@ -299,36 +319,40 @@ namespace Recipies.Controllers
                     
                 }
                 var wwwRootPath = _webHostEnvironment.WebRootPath;
-                foreach (var image in model.Images)
+                if (model.Images != null)
                 {
-                    string fileName = Path.GetFileNameWithoutExtension(image.FileName + recipeId);
-                    string extension = Path.GetExtension(image.FileName);
-
-                    fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
-                    string path = Path.Combine(wwwRootPath + "/Images/", fileName);
-                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    foreach (var image in model.Images)
                     {
-                        await image.CopyToAsync(fileStream);
+                        string fileName = Path.GetFileNameWithoutExtension(image.FileName + recipeId);
+                        string extension = Path.GetExtension(image.FileName);
+
+                        fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                        string path = Path.Combine(wwwRootPath + "/Images/", fileName);
+                        using (var fileStream = new FileStream(path, FileMode.Create))
+                        {
+                            await image.CopyToAsync(fileStream);
+                        }
+
+                        var imageModel = new ImageModel
+                        {
+                            CreatedOn = DateTime.Now,
+                            Extension = extension,
+                            RecipeId = Guid.Parse(recipeId),
+                            UserId = userID,
+                            FilePath = path,
+                            ImageName = fileName
+                        };
+                        await _imageService.CreateAsync(imageModel);
+
                     }
-
-                    var imageModel = new ImageModel
-                    {
-                        CreatedOn = DateTime.Now,
-                        Extension = extension,
-                        RecipeId = Guid.Parse(recipeId),
-                        UserId = userID,
-                        FilePath = path,
-                        ImageName = fileName
-                    };
-                    await _imageService.CreateAsync(imageModel);
-                    
                 }
-
+                
+                this.TempData["Message"] = "Successfully updated recipe !";
                 return RedirectToAction("All", "Recipes");
             }
             catch (Exception e)
             {
-                return View(model);
+                return View("Update",model);
             }
             
         }
@@ -429,20 +453,21 @@ namespace Recipies.Controllers
                     {
                         break;
                     }
-                    foreach (var product in productsIds)
+                    for (int j = 0; j < productsIds.Count; j++)
                     {
                         var recipeProduct = new RecipeProductsModel
                         {
                             RecipeId = recipeId,
-                            ProductId = product,
+                            ProductId = productsIds[counter],
                             Quantity = model.Ingredients[counter].Quantity
                         };
                         await this._recipeProductsService.CreateAsync(recipeProduct);
                         counter++;
                         break;
-
                     }
+                    
                 }
+                this.TempData["Message"] = "Successfully added recipe !";
                 return RedirectToAction("All");
             }
             catch (Exception е)

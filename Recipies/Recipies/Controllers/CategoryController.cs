@@ -95,6 +95,7 @@ namespace Recipies.Controllers
         {
             var categoryModel = _mapper.Map<CategoryModel>(model);
             await _categoryService.CreateAsync(categoryModel);
+            this.TempData["Message"] = "Successfully added category!";
             return Redirect("/Recipes/All");
         }
 
@@ -110,7 +111,7 @@ namespace Recipies.Controllers
             var removeCategoryModel = new RemoveCategoryModel
             {
                 Categories = selectList
-            };
+            };            
             return View(removeCategoryModel);
         }
 
@@ -119,6 +120,7 @@ namespace Recipies.Controllers
         {
             var category = await _categoryService.ReadAsync(Guid.Parse(model.Id));
             await _categoryService.DeleteAsync(category);
+            this.TempData["Message"] = "Successfully removed category !";
             return RedirectToAction("All","Recipes");
         }
     }
