@@ -25,10 +25,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Recipes.Data.Contracts", "R
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Recipes.Data.Implementation", "Recipes.Data.Implementation\Recipes.Data.Implementation.csproj", "{E63458AA-400E-458D-A857-EC71FEF5C7A7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{AC387547-0AEC-412C-80CC-64500025437A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipesTests", "RecipesTests\RecipesTests.csproj", "{5459B587-96B7-4202-BA29-76391EB06E2D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,10 +59,6 @@ Global
 		{E63458AA-400E-458D-A857-EC71FEF5C7A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E63458AA-400E-458D-A857-EC71FEF5C7A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E63458AA-400E-458D-A857-EC71FEF5C7A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5459B587-96B7-4202-BA29-76391EB06E2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5459B587-96B7-4202-BA29-76391EB06E2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5459B587-96B7-4202-BA29-76391EB06E2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5459B587-96B7-4202-BA29-76391EB06E2D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,7 +70,6 @@ Global
 		{7DBE4132-85FC-41B7-8083-FE552E2B2B1F} = {0A5DF670-02E4-46A6-9C22-3D12DD1CBAA7}
 		{3793739C-768C-47DB-977F-4FF44F94ADC7} = {0A5DF670-02E4-46A6-9C22-3D12DD1CBAA7}
 		{E63458AA-400E-458D-A857-EC71FEF5C7A7} = {0A5DF670-02E4-46A6-9C22-3D12DD1CBAA7}
-		{5459B587-96B7-4202-BA29-76391EB06E2D} = {AC387547-0AEC-412C-80CC-64500025437A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0BAA2A26-E82E-45DD-94D7-6D1F84AAF208}
