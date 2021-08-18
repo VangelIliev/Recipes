@@ -8,7 +8,8 @@ The project has different roles which give a different experience in the website
 There is a administrator panel to manage users and recipes.
 Also you can send us email about a problem or just to ask something in the contact form.
 
-Project is built with the OOP and SOLID principles using Repository Pattern and keeping good coding practices :
+Project is built with the OOP and SOLID principles using Repository Pattern and keeping good coding practices.
+Technologies used : 
 .NET 5.0
 ASP.NET 5.0
 ASP.NET WebAPI 5.0
