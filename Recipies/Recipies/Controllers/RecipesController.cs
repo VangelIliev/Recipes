@@ -90,7 +90,7 @@ namespace Recipies.Controllers
                         PreparationDescription = recipe.PreparationDescription,
                         TimeToPrepare = recipe.TimeToPrepare,
                         CreatedBy = userName.Email,
-                        NumberOfComments = recipe.NumberOfComments,
+                        NumberOfComments = currentRecipeCommentsCount,
                         NumberOfLikes = numberOfLikes,
                         Name = recipe.Name
                     };
