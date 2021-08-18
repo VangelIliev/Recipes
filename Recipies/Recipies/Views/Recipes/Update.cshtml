@@ -39,7 +39,7 @@
                                     <span class="input-group-text">-</span>
                                 </div>
                                 <input type="text" name="Ingredients[@i].Quantity" value="@Model.Ingredients[i].Quantity" class="form-control" placeholder="Quantity">
-                                <button type="button" style="margin-left:5px" class="btn btn-danger" id="recipeProductsBtnRemove">-</button>
+                                <button type="button" style="margin-left:5px" class="btn btn-danger" id="recipeProductsBtnRemove-@i">-</button>
                             </div>
                             <br />
                         }
@@ -79,9 +79,8 @@
             $(document).click(function (event) {
                 var clickedElement = $(event.target).text();
                 if ($(event.target).is(":button")) {
-                    //To do do not allow to remove the first element
-                    if (clickedElement === "-") {
-                       $(event.target.parentElement).remove();
+                    if (event.target.id !== "recipeProductsBtnRemove-0") {
+                        $(event.target.parentElement).remove();
                     }
 
                 }

@@ -30,14 +30,17 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Ingredients" class="control-label"></label>
-                    <div class="input-group" id="recipeProductsDiv">
-                        <input type="text" name="Ingredients[0].IngredientName" class="form-control" placeholder="Product">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">-</span>
+                    <div id="mainDiv">
+                        <div class="input-group" id="recipeProductsDiv">
+                            <input type="text" name="Ingredients[0].IngredientName" id="firstElement" class="form-control" placeholder="Product">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">-</span>
+                            </div>
+                            <input type="text" name="Ingredients[0].Quantity" class="form-control" placeholder="Quantity">
+                            <button type="button" style="margin-left:5px" class="btn btn-danger" id="recipeProductsBtnRemove-0">-</button>
                         </div>
-                        <input type="text" name="Ingredients[0].Quantity" class="form-control" placeholder="Quantity">
-                        <button type="button" style="margin-left:5px" class="btn btn-danger" id="recipeProductsBtnRemove">-</button>
                     </div>
+                    
                     <span asp-validation-for="Ingredients" class="text-danger"></span>
                 </div>
                 <div class="form-group" style="text-align:center">
@@ -65,17 +68,19 @@
 {
     <script>
         $(document).ready(function (){
-            var recipeProductsDiv = document.getElementById('recipeProductsDiv');
+            var recipeProductsDiv = document.getElementById('mainDiv');
             var btnAdd = document.getElementById('recipeProductsBtnAdd');
 
             $(document).click(function (event) {
                 var clickedElement = $(event.target).text();
                 if ($(event.target).is(":button")) {
-                    //To do do not allow to remove the first element
-                    if (clickedElement === "-") {
-                       $(event.target.parentElement).remove();
-                    }
                     
+                    if (clickedElement === "-") {
+                        
+                        if (event.target.id !== "recipeProductsBtnRemove-0") {
+                            $(event.target.parentElement).remove();
+                        }                                              
+                    }                    
                 }
 
             });
