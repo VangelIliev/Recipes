@@ -307,17 +307,20 @@ namespace Recipies.Controllers
                 //Update Images
                 var images = await _imageService.FindAllAsync();
                 var imagesForRecipe = images.Where(x => x.RecipeId == Guid.Parse(recipeId)).ToList();
-                foreach (var image in imagesForRecipe)
+                if (model.Images != null)
                 {
-                    await _imageService.DeleteAsync(image);
-                    var path = image.FilePath;
-                    if (System.IO.File.Exists(path))
+                    foreach (var image in imagesForRecipe)
                     {
-                        System.IO.File.Delete(path);
+                        await _imageService.DeleteAsync(image);
+                        var path = image.FilePath;
+                        if (System.IO.File.Exists(path))
+                        {
+                            System.IO.File.Delete(path);
+
+                        }
 
                     }
-                    
-                }
+                }               
                 var wwwRootPath = _webHostEnvironment.WebRootPath;
                 if (model.Images != null)
                 {
@@ -406,7 +409,7 @@ namespace Recipies.Controllers
                 foreach (var inputIngredient in model.Ingredients)
                 {
                     var ingredients = await this._productService.FindAllAsync();
-                    var ingredient = ingredients.FirstOrDefault(x => x.Name == inputIngredient.IngredientName);
+                    var ingredient = ingredients.FirstOrDefault(x => x.Name == inputIngredient.IngredientName.Trim());
                     if (ingredient == null)
                     {
                         ingredient = new ProductModel
